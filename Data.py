@@ -82,6 +82,12 @@ class Data:
     def getIntergerList(start, end, interval):
         integerList = [ int(elem) for elem in numpy.arange(start, end + interval*0.1, interval) ]
         return integerList
+    
+    def getFloatList(start, end, interval):
+            
+        floatList = [ float(elem) for elem in numpy.arange(start, end + interval*0.1, interval) ]
+            
+        return floatList
 
     def getRelativeChange(dataarray, denominator = None, limiter = 0, relative = True, lahtoarvo = None):
     

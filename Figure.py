@@ -10,30 +10,61 @@ import matplotlib
 import numpy
 import pathlib
 import seaborn
+import sys
 
 class Figure:
     
     def __init__(self, figurefolder, name,
-                 nrows = 1, ncols =1, sharex=False, sharey=False, style = "seaborn-paper"):
+                 nrows = 1, ncols =1, sharex=False, sharey=False, style = "seaborn-paper",
+                 figsize = None,width = None,
+                 wspace=0.3, hspace=0.12, 
+                 top = 0.985, left = 0.12, right=0.97, bottom = 0.1
+                 ):
         
         self._setContext(style)
         
         self.figurefolder = pathlib.Path(figurefolder)
         self.name = name
         self.absoluteName = self.figurefolder / name
-        self.fig, self.axes = matplotlib.pyplot.subplots( nrows = nrows, ncols=ncols, sharex=sharex, sharey=sharey, figsize=(matplotlib.rcParams['figure.figsize']) )
-        self.oldContextValues = {}
         
+        
+        aspectRatio = 1.5
+        inchInCM = 2.54
+        if figsize is None:
+            if width is None:
+                width = 12/inchInCM
+            figsize = [width, width*nrows/ncols/aspectRatio]
+        
+        
+        self.fig = matplotlib.pyplot.figure(figsize=figsize, constrained_layout=False)
+        self.grid = matplotlib.gridspec.GridSpec(nrows, ncols,
+                                            wspace=wspace, hspace=hspace, 
+                                            top = top, left = left, right = right, bottom = bottom)
+        
+        self.coords = numpy.arange(ncols*nrows).reshape(nrows,ncols)
+        
+        self.axesList = []
+        
+        for yCoord in range(nrows):
+            for xCoord in range(ncols):
+                self.axesList.append(matplotlib.pyplot.subplot( self.grid[yCoord,xCoord] ))
+        
+        self.oldContextValues = {}
+    
     def getFig(self):
         return self.fig
     
-    def getAxes(self, getFlatten = False):
-        if getFlatten:
-            axes =  numpy.asarray(self.axes).flatten()
-        else:
-            axes =  self.axes
+  
+    def getAxes(self, ind=1):
         
-        return axes
+        # coordIndexes = numpy.where(self.coords==ind)
+        
+        # yCoord = coordIndexes[0].item()
+        # xCoord = coordIndexes[1].item()
+        
+        return self.axesList[ind] #matplotlib.pyplot.subplot( self.grid[yCoord,xCoord] )
+        
+        
     
     def getOldContextValues(self):
         return self.oldContextValues
@@ -64,7 +95,7 @@ class Figure:
 #        if printing: print('figure.figsize', matplotlib.rcParams['figure.figsize'])
 #    
 #        if printing: print('figure.dpi', matplotlib.rcParams['figure.dpi'])
-        matplotlib.rcParams['savefig.dpi'] = 300.
+        matplotlib.rcParams['savefig.dpi'] = 900
 #        if printing: print('savefig.dpi', matplotlib.rcParams['savefig.dpi'])
 #        matplotlib.rcParams['legend.fontsize'] = 14
 #        if printing: print('legend.fontsize', matplotlib.rcParams['legend.fontsize'])
@@ -89,8 +120,6 @@ class Figure:
         
     #, padding = 0.06, bbox_inches = "tight"
     def save(self, file_extension = ".pdf", useTight = True, close = True):
-        if useTight:
-            self.fig.tight_layout()
             
         #self.fig.savefig( self.absoluteName.with_suffix( file_extension ), pad_inches = padding, bbox_inches = bbox_inches )
         self.fig.savefig( self.absoluteName.with_suffix( file_extension ))

@@ -27,7 +27,7 @@ class InputSimulation:
         self.labelCollection  = InputSimulation.__setupCollection(self,folder, labelCollection)
         self.colorCollection  = InputSimulation.__setupCollection(self,folder, colorSet)
         
-        self.simulationDataFrame = InputSimulation.initSimulationDataFrame(self)
+        self.simulationDataFrame = InputSimulation.__initSimulationDataFrame(self)
         
     def __setupCollection(self, folder, collectionVar):
         
@@ -56,31 +56,10 @@ class InputSimulation:
             simulationColorCollection[ind] = colorCollection[label]
         
         return list(simulationColorCollection)
+
     
-    def getIdCollection(self):
-        return self.idCollection
-    def getFolderCollection(self):
-        return self.folderCollection
-    def getLabelCollection(self):
-        return self.labelCollection
-    def getColorCollection(self):
-        return self.colorCollection
-    def getSimulationDataFrame(self):
-        return self.simulationDataFrame
-    
-    def setIdCollection(self, idCollection):
-        self.idCollection = idCollection
-    def setFolderCollection(self, folderCollection):
-        self.folderCollection = folderCollection
-    def setLabelCollection(self, labelCollection):
-        self.labelCollection = labelCollection
-    def setColorCollection(self, colorCollection):
-        self.colorCollection = colorCollection
-    def setSimulationDataFrame(self, simulationDataFrame):
-        self.simulationDataFrame = simulationDataFrame
-    
-    def initSimulationDataFrame(self):
-        checkType, checkLength = InputSimulation.checkObj(self)
+    def __initSimulationDataFrame(self):
+        checkType, checkLength = InputSimulation.__checkObj(self)
         
         if checkType and checkLength:
         
@@ -96,7 +75,7 @@ class InputSimulation:
         
         return self.simulationDataFrame
     
-    def getSimulationCollection(simulationDataFrame):
+    def getSimulationCollection(simulationDataFrame): #public
         simulationCollection = {}
         for i in range(simulationDataFrame.shape[0]):
             simulationCollection[ simulationDataFrame.iloc[i]["ID"] ] = Simulation( simulationDataFrame.iloc[i]["FOLDER"],
@@ -105,8 +84,8 @@ class InputSimulation:
         return simulationCollection
     
     
-    def checkObj(self):
-        checkType, checkLength = InputSimulation.checkLists([self.idCollection, self.folderCollection, self.labelCollection, self.colorCollection])
+    def __checkObj(self):
+        checkType, checkLength = InputSimulation.__checkLists([self.idCollection, self.folderCollection, self.labelCollection, self.colorCollection])
         
         if not checkType:
             print("Object variable types are not lists")
@@ -115,7 +94,7 @@ class InputSimulation:
             
         return checkType, checkLength
     
-    def checkLists(arrayOfLists):
+    def __checkLists(arrayOfLists):
         checkType = True
         checkLength = True
         for k in arrayOfLists:
@@ -126,9 +105,9 @@ class InputSimulation:
         
         return checkType, checkLength
     
-    def saveDataFrameAsCSV(self, folder, file = None):
+    def saveDataFrameAsCSV(self, folder, file = None): #public
         if self.simulationDataFrame is None:
-            raise Exception("simulationDataFrame is not set. Set proper object variables and run initSimulationDataFrame()")
+            raise Exception("simulationDataFrame is not set. Set proper object variables and run __initSimulationDataFrame()")
         if file is None:
             absFile = folder
         else:
@@ -137,7 +116,7 @@ class InputSimulation:
         
         return absFile
     
-    def getEmulatorFileList(superRootFolder, emulatorSet = None, listOfCases = None):
+    def getEmulatorFileList(superRootFolder, emulatorSet = None, listOfCases = None):#public
         
         if emulatorSet is not None:
             absolutepath = pathlib.Path(superRootFolder) / emulatorSet
@@ -156,7 +135,7 @@ class InputSimulation:
                     fileList.append(case)
         return fileList
     
-    def getEmulatorIDlist(fileList):
+    def getEmulatorIDlist(fileList):#public
         idList =  [None] * len(fileList)
         
         for ind,file in enumerate(fileList):
@@ -170,7 +149,7 @@ class InputSimulation:
             
         return list(idList)
     
-    def getEmulatorDesignAsDataFrame(folder, identifierPrefix, file = "design.csv"):
+    def getEmulatorDesignAsDataFrame(folder, identifierPrefix, file = "design.csv"):#public
         absolutePath = pathlib.Path(folder) / file
         
         designDataframe = pandas.read_csv(absolutePath)

@@ -43,7 +43,7 @@ class Plot:
         try:
             dataset = ts[muuttuja]
         except KeyError:
-            print("KeyError")
+            print("KeyError", simulation)
             return None
         
         # conversion
@@ -108,7 +108,6 @@ class Plot:
             
             colorbarLabelListShowBoolean = Data.getIntegerExponentsAsBoolean( levels )
             cb = PlotTweak.hideColorbarXLabels(cb, colorbarLabelListShowBoolean)
-            cb.ax.tick_params(labelsize=36)
     
     # REVISE
     def getTimeseriesOfProportions(axes,

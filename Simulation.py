@@ -21,6 +21,10 @@ class Simulation:
         self.ts = None
         self.linewidth = linewidth
         
+        self.__ncHours = False
+        self.__psHours = False
+        self.__tsHours = False
+        
     def getColor(self):
         return self.color
     
@@ -103,12 +107,18 @@ class Simulation:
         return dataset
     
     def setTimeCoordToHours(self):
-        if self.nc is not None:
+        if self.nc is not None and (not self.__ncHours):
             self.nc = self.nc.assign_coords(time = (self.nc.time / 3600))
-        if self.ps is not None:
+            self.__ncHours = True
+        if self.ps is not None and (not self.__psHours):
             self.ps = self.ps.assign_coords(time = (self.ps.time / 3600))
-        if self.ts is not None:
+            self.__psHours = True
+        if self.ts is not None and (not self.__tsHours):
             self.ts = self.ts.assign_coords(time = (self.ts.time / 3600))
+            self.__tsHours = True
             
     def setLineWidth(self, linewidth):
         self.linewidth = linewidth
+        
+    def setColor(self, color):
+        self.color = color

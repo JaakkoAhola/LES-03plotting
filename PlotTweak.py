@@ -11,7 +11,6 @@ import numpy
 import time
 
 from Data import Data
-from Simulation import Simulation
 
 class PlotTweak:
     # DELETE
@@ -101,16 +100,23 @@ class PlotTweak:
     
         return ax #DELETE ENDS
     
-    def setXticks(ax, ticks = None, start = 0, end = 8, interval = 0.5):
+    def setXticks(ax, ticks = None, start = 0, end = 8, interval = 0.5, integer = True):
         if ticks is None:
-            ticks = Data.getIntergerList( start, end, interval)
+            if integer:
+                ticks = Data.getIntergerList( start, end, interval)
+            else:
+                ticks = Data.getFloatList(start, end, interval)
             
         PlotTweak._setTicks(ax.set_xticks, ticks)
         return ticks
     
-    def setYticks(ax, ticks, start = 0, end = 1000, interval = 50):
+    def setYticks(ax, ticks = None, start = 0, end = 1000, interval = 50, integer = True):
         if ticks is None:
-            ticks = Data.getIntergerList( start, end, interval)
+            if integer:
+                ticks = Data.getIntergerList( start, end, interval)
+            else:
+                ticks = Data.getFloatList(start, end, interval)
+            
         
         PlotTweak._setTicks(ax.set_yticks, ticks)
         
@@ -122,20 +128,23 @@ class PlotTweak:
         return ticks
     
     
-    def setXLabels(ax, ticks, shownLabels = None, start = 0, end = 8, interval = 2):
+    def setXLabels(ax, ticks, shownLabels = None, start = 0, end = 8, interval = 2, integer = True):
         shownLabelsBoolean = PlotTweak._setLabels( ax.set_xticklabels, ax.xaxis, ticks, shownLabels, start, end, interval)
         return shownLabelsBoolean
     
-    def setYLabels(ax, ticks, shownLabels = None, start = 0, end = 8, interval = 2):
+    def setYLabels(ax, ticks, shownLabels = None, start = 0, end = 8, interval = 2, integer = True):
         shownLabelsBoolean = PlotTweak._setLabels( ax.set_yticklabels, ax.yaxis, ticks, shownLabels, start, end, interval)
         return shownLabelsBoolean
     
-    def _setLabels(axset, ax_axis, ticks, shownLabels = None, start = 0, end = 8, interval = 2):
+    def _setLabels(axset, ax_axis, ticks, shownLabels = None, start = 0, end = 8, interval = 2, integer = False):
         
         axset(ticks)
         
         if shownLabels is None:
-            shownLabels = Data.getIntergerList( start, end, interval )
+            if integer:
+                shownLabels = Data.getIntergerList( start, end, interval )
+            else:
+                shownLabels = Data.getFloatList(start, end, interval)
         
         shownLabelsBoolean = Data.getMaskedList(ticks, shownLabels)
         
@@ -158,14 +167,14 @@ class PlotTweak:
         matplotlib.pyplot.setp(axTicksGetter()[:], visible=False)
     
     def setXTickSizes(ax, labelListMajorLineBoolean,
-                  majorFontsize = matplotlib.rcParams["xtick.major.size"],
-                  minorFontSize = matplotlib.rcParams["xtick.minor.size"]):
+                  majorFontsize = matplotlib.rcParams["xtick.major.size"]*2,
+                  minorFontSize = matplotlib.rcParams["xtick.minor.size"]*2):
         
         PlotTweak._setTickSizes(ax.xaxis, labelListMajorLineBoolean, majorFontsize, minorFontSize)
     
     def setYTickSizes(ax, labelListMajorLineBoolean,
-                  majorFontsize = matplotlib.rcParams["ytick.major.size"],
-                  minorFontSize = matplotlib.rcParams["ytick.minor.size"]):
+                  majorFontsize = matplotlib.rcParams["ytick.major.size"]*2,
+                  minorFontSize = matplotlib.rcParams["ytick.minor.size"]*2):
         
         PlotTweak._setTickSizes(ax.yaxis, labelListMajorLineBoolean, majorFontsize, minorFontSize)
     
@@ -181,7 +190,7 @@ class PlotTweak:
                 line.set_markersize(minorFontSize)
             k= k + 1
 
-    def getUnitLabel(label, unit, useBold = False):
+    def getUnitLabel(label, unit, useBold = True):
         if useBold:
             boldingStart = "\mathbf{"
             boldingEnd  = "}"
@@ -191,10 +200,10 @@ class PlotTweak:
         
         return r"$" +boldingStart +  "{" + label +  "}{\ } ( " + unit +      ")" + boldingEnd + "$"
     
-    def setXaxisLabel(ax, label, unit = None, useBold = False):
+    def setXaxisLabel(ax, label, unit = None, useBold = True):
         PlotTweak._setLabel(ax.set_xlabel, label, unit, useBold)
     
-    def setYaxisLabel(ax, label, unit = None, useBold = False):
+    def setYaxisLabel(ax, label, unit = None, useBold = True):
         PlotTweak._setLabel(ax.set_ylabel, label, unit, useBold)
     
     def _setLabel(labelPointer, label, unit, useBold):
@@ -221,7 +230,7 @@ class PlotTweak:
 
     def setAnnotation(ax,
                       text,
-                      fontsize = None,
+                      fontsize = matplotlib.rcParams["xtick.labelsize"],
                       xPosition = 0, yPosition = 0,
                       bbox_props = dict(boxstyle="square,pad=0.1", fc="w", ec="0.5", alpha=0.9)):
         ax.annotate( text, xy=(xPosition, yPosition), size=fontsize, bbox = bbox_props)
