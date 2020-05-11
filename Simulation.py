@@ -72,8 +72,18 @@ class Simulation:
             raise FileNotFoundError(ncMode, "file not found from", self.folder)
         
         return dataset
+    
+    def setNCDataset(self, nc):
+        self.nc = nc
+    
+    def setTSDataset(self, ts):
+        self.ts = ts
+    
+    def setPSDataset(self,ps):
+        self.ps = ps
 
     
+    # needs revision
     def getEntrainment(self,
                        divergence = 5.e-6):
         ts = self.getTSDataset()

@@ -25,6 +25,36 @@ class Data:
             bini = bini
         return colorArray[bini]
 
+    def getBinLimits(valueList):
+        valueList = sorted(valueList)
+        
+        minimum = valueList[0] - (valueList[1] - valueList[0] )
+        
+        maximum = valueList[-1] + (valueList[-1]-valueList[-2])
+        
+        
+        binLimits = [minimum]
+
+        for ind in range(1,len(valueList)):
+            
+            binLimits.append( (valueList[ind] + valueList[ind-1])/2 )
+            
+        binLimits.append(maximum)
+        
+        return binLimits
+    
+    def getBinLimitsWithPackingStartingWithLastOnes(valueList, packing):
+        
+        binLimits = Data.getBinLimits(valueList)
+        
+        binLimitsPacked = binLimits[:packing]
+        
+        binLimitsPacked.append(binLimits[-1])
+        
+        
+        return binLimitsPacked
+        
+
     def getIntegerExponentsAsBoolean(dataarray):
         helpArray = numpy.zeros(numpy.shape(dataarray))
         for ind,value in enumerate(dataarray):

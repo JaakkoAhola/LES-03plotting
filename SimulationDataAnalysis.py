@@ -12,89 +12,145 @@ import numpy
 import sys
 import xarray
 from Simulation import Simulation
+from Data import Data
 
 class SimulationDataAnalysis:
     
-    def __init__(self, simulation : Simulation, limit = 1e-6):
+    def __init__(self, simulation : Simulation, variableName):
         
         self.simulation = simulation
         
-        self.limit = limit
+        self.variableName = variableName
         
-        self.sizeBinNameA = "SizeBinA"
-        self.sizeBinNameB = "SizeBinB"
+        self.filteredVariableName = None
         
-    def renamePSVariableCoordSizeBinA(self, variable ):
-        data = self.simulation.getPSDataset()[variable]
+        self.filteredPackedVariableName = None
+        
+        self.sizeBinName = None
+
+        self.sizeBinNameGroupedByBins = None
+
+    def getFilteredVariableName(self):
+        return self.filteredVariableName
+    
+    def getFilteredPackedVariableName(self):
+        return self.filteredPackedVariableName
+    
+    def getSizeBinNameGroupedByBins(self):
+        return self.sizeBinNameGroupedByBins
+    
+    
+    def getFilteredCoordName(self):
+        return self.sizeBinName
+    
+    def packFilteredPSVariablewithSizeBinCoords(self, packing):
+        ps = self.simulation.getPSDataset()
+        
+        bins =  Data.getBinLimitsWithPackingStartingWithLastOnes( ps[self.sizeBinName].values, packing)
+        
+        self.filteredPackedVariableName = self.filteredVariableName + "_bins"
+        
+        self.sizeBinNameGroupedByBins = self.sizeBinName + "_bins"
+        
+        ps[self.filteredPackedVariableName] =  ps[self.filteredVariableName].groupby_bins( self.sizeBinName, bins).sum()
+    
+        
+    def renamePSCoordSizeBinA(self):
+        data = self.simulation.getPSDataset()
         
         oldName = None
         for k in ["aea", "cla", "ica"]:
-            if k in data.coords:
+            if k in data[self.variableName].coords:
                 oldName = k
                 break
             else:
                 continue
         
-        if oldName is None:
-            sys.exit("renamePSVariableSizeBinBCoord", variable, self, "old coordinate is not suitable for SizeBinA")
+        if oldName is not None:
+            self.sizeBinName = "SizeBinA"
+            self.simulation.setPSDataset( data.rename( {oldName:self.sizeBinName}) )
         else:
-            data = data.rename({oldName:self.sizeBinNameA})      
+            sys.exit("renamePSVariableSizeBinBCoord", self, "old coordinate is not suitable for SizeBinA")
             
-    def renamePSVariableCoordSizeBinB(self, variable ):
-        data = self.simulation.getPSDataset()[variable]
+    def renamePSCoordSizeBinB(self):
+        data = self.simulation.getPSDataset()
         
         oldName = None
         for k in ["aeb", "clb", "icb"]:
-            if k in data.coords:
+            if k in data[self.variableName].coords:
                 oldName = k
                 break
             else:
                 continue
         
-        if oldName is None:
-            sys.exit("renamePSVariableSizeBinBCoord", variable, self, "old coordinate is not suitable for SizeBinB")
+        if oldName is not None:
+            self.sizeBinName = "SizeBinB"
+            self.simulation.setPSDataset( data.rename( {oldName:self.sizeBinName}) )
         else:
-            data = data.rename({oldName:self.sizeBinNameB})
-
+            sys.exit("renamePSVariableSizeBinBCoord", self, "old coordinate is not suitable for SizeBinB")
+            
+    
+    def __getFilteredStatus(self):
+        if self.filteredVariableName is None:
+            return False
+        else:
+            return True
           
     
-    def filterPSVariableAboveCloud(self, variable ):
+    def filterPSVariableAboveCloud(self ):
+        
+        if self.__getFilteredStatus():
+            print("Already filtered the desired variable")
+            return
+        else:
+            self.filteredVariableName = self.variableName + "_filteredByAboveCloud"
+        
         ps = self.simulation.getPSDataset()
         ts = self.simulation.getTSDataset()
         
-        filteredVariableName = variable + "_filteredByAboveCloud"
+        ps[self.filteredVariableName] = ps[self.variableName].where(ps["zt"] > ts["zc"], drop = True).mean(dim = "zt", skipna = True)
         
-        ps[filteredVariableName] = ps[variable].where(ps["zt"] > ts["zc"], drop = True).mean(dim = "zt", skipna = True)
-        
-        return filteredVariableName
     
-    def filterPSVariableInCloud(self, variable ):
+    def filterPSVariableInCloud(self, limit = 1e-6 ):
+        
+        if self.__getFilteredStatus():
+            print("Already filtered the desired variable")
+            return
+        else:
+            self.filteredVariableName = self.variableName +"_filteredByInCloud"
+        
         ps = self.simulation.getPSDataset()
         
-        filteredVariableName = variable + "_filteredByInCloud"
-        ps[filteredVariableName] = ps[variable].where( (ps["P_rl"] > self.limit) & (ps["P_ri"] > self.limit), drop = True).mean(dim = "zt", skipna = True)
+        ps[self.filteredVariableName] = ps[self.variableName].where( (ps["P_rl"] > limit) & (ps["P_ri"] > limit), drop = True).mean(dim = "zt", skipna = True)
         
-        return filteredVariableName
     
-    def filterPSVariableBelowCloud(self, variable ):
+    def filterPSVariableBelowCloud(self, limit = 1e-6 ):
+        
+        if self.__getFilteredStatus():
+            print("Already filtered the desired variable")
+            return
+        else:
+            self.filteredVariableName = self.variableName + "_filteredByBelowCloud"
+        
+        
         ps = self.simulation.getPSDataset()
         ts = self.simulation.getTSDataset()
         
-        filteredVariableName = variable + "_filteredByBelowCloud"
+        ps[self.filteredVariableName] = ps[self.variableName].where(ps["P_rl"] < limit, drop = True).where(ps["zt"] < ts["zb"], drop = True).mean(dim = "zt", skipna = True) 
         
-        ps[filteredVariableName] = ps[variable].where(ps["P_rl"] < self.limit, drop = True).where(ps["zt"] < ts["zb"], drop = True).mean(dim = "zt", skipna = True) 
+    def filterPSVariableAtHeight(self, height):
         
-        return filteredVariableName
+        if self.__getFilteredStatus():
+            print("Already filtered the desired variable")
+            return
+        else:
+            self.filteredVariableName = self.variableName + "_filteredByAtHeight"
         
-    def filterPSVariableAtHeight(self, variable, height):
         ps = self.simulation.getPSDataset()
         
-        filteredVariableName = variable + "_filteredByAtHeight"
-        
-        ps[variable] = ps[variable].sel(zt = height, method = 'nearest')
-        
-        return filteredVariableName
+        ps[self.filteredVariableName] = ps[self.variableName].sel(zt = height, method = 'nearest')
     
+        
         
     def getTimeseriesOfProportions( simulation : Simulation,
                                    mode = "inCloud", limit = 1e-6, height = None, packing = None):
@@ -125,12 +181,13 @@ class SimulationDataAnalysis:
             ice   = ps["P_Nibb"]
         except KeyError:
             return
-        #TÄSSÄ OLLAAN
+        
         newname = "dryRadiusBinB"
         aero = aero.rename({"aeb":newname})
         cloud = cloud.rename({"clb":newname})
         ice   = ice.rename({"icb":newname})
         
+        #TÄSSÄ OLLAAN REFACTORINGISSA
         total = aero + cloud + ice
         
         if packing is not None:
