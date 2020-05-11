@@ -266,13 +266,13 @@ class PlotTweak:
     
     def setArtist(ax,
                   collectionOfLabelsColors,
-                  loc = "center", fontsize = None):
+                  loc = "center", fontsize = None, ncol = 1, framealpha = 1.0 ):
         legend_elements = []
         for label, color in collectionOfLabelsColors.items():
             legend_elements.append( matplotlib.patches.Patch( label=label,
                                                               facecolor=color))
 
-        artist = ax.legend( handles=legend_elements, loc=loc, frameon = True, framealpha = 1.0, fontsize = fontsize )
+        artist = ax.legend( handles=legend_elements, loc=loc, frameon = True, framealpha = framealpha, fontsize = fontsize, ncol = ncol )
         
         ax.add_artist(artist)
         

@@ -55,7 +55,7 @@ class Figure:
         return self.fig
     
   
-    def getAxes(self, ind=1):
+    def getAxes(self, ind=0):
         
         # coordIndexes = numpy.where(self.coords==ind)
         
