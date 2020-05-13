@@ -167,14 +167,14 @@ class PlotTweak:
         matplotlib.pyplot.setp(axTicksGetter()[:], visible=False)
     
     def setXTickSizes(ax, labelListMajorLineBoolean,
-                  majorFontsize = matplotlib.rcParams["xtick.major.size"]*2,
-                  minorFontSize = matplotlib.rcParams["xtick.minor.size"]*2):
+                  majorFontsize = 7,
+                  minorFontSize = 4):
         
         PlotTweak._setTickSizes(ax.xaxis, labelListMajorLineBoolean, majorFontsize, minorFontSize)
     
     def setYTickSizes(ax, labelListMajorLineBoolean,
-                  majorFontsize = matplotlib.rcParams["ytick.major.size"]*2,
-                  minorFontSize = matplotlib.rcParams["ytick.minor.size"]*2):
+                  majorFontsize = 7,
+                  minorFontSize = 4):
         
         PlotTweak._setTickSizes(ax.yaxis, labelListMajorLineBoolean, majorFontsize, minorFontSize)
     
