@@ -9,6 +9,7 @@ Created on Fri Jan 10 13:14:55 2020
 import numpy
 import pathlib
 import xarray
+from Data import Data
 
 class Simulation:
     
@@ -81,6 +82,26 @@ class Simulation:
     
     def setPSDataset(self,ps):
         self.ps = ps
+        
+    def sliceByTimeNCDataset(self,timeStart, timeEnd):
+        
+        self.nc = self.__sliceByTimeDataset( self.getNCDataset(), timeStart, timeEnd)
+        
+    def sliceByTimePSDataset(self,timeStart, timeEnd):
+        
+        self.ps = self.__sliceByTimeDataset(self.getPSDataset(),timeStart, timeEnd)
+        
+    def sliceByTimeTSDataset(self,timeStart, timeEnd):
+        
+        self.ts = self.__sliceByTimeDataset(self.getPSDataset(), timeStart, timeEnd)    
+        
+        
+    
+    def __sliceByTimeDataset(self, dataSet, timeStart, timeEnd):
+        timeStartInd = Data.getClosestIndex( dataSet.time.values, timeStart )
+        timeEndInd   = Data.getClosestIndex( dataSet.time.values, timeEnd )
+        
+        return  dataSet.isel(time = slice(timeStartInd,timeEndInd))
 
     
     # needs revision
@@ -126,7 +147,7 @@ class Simulation:
         if self.ts is not None and (not self.__tsHours):
             self.ts = self.ts.assign_coords(time = (self.ts.time / 3600))
             self.__tsHours = True
-            
+    
     def setLineWidth(self, linewidth):
         self.linewidth = linewidth
         
