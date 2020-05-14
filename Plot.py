@@ -52,7 +52,8 @@ class Plot:
         dataset.plot(ax = ax,
                      color = simulation.getColor(),
                      label =  simulation.getLabel(),
-                     linewidth = simulation.getLineWidth())
+                     linewidth = simulation.getLineWidth(),
+                     zorder = simulation.getZorder())
         
         return ax
     

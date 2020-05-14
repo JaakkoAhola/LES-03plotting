@@ -230,7 +230,7 @@ class PlotTweak:
 
     def setAnnotation(ax,
                       text,
-                      fontsize = matplotlib.rcParams["xtick.labelsize"],
+                      fontsize = 8,
                       xPosition = 0, yPosition = 0,
                       bbox_props = dict(boxstyle="square,pad=0.1", fc="w", ec="0.5", alpha=0.9)):
         ax.annotate( text, xy=(xPosition, yPosition), size=fontsize, bbox = bbox_props)

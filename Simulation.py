@@ -13,7 +13,7 @@ from Data import Data
 
 class Simulation:
     
-    def __init__(self, folder, label, color, linewidth = None):
+    def __init__(self, folder, label, color, linewidth = None, zorder = 1):
         self.folder = pathlib.Path(folder)
         self.label = label
         self.color = color
@@ -26,6 +26,8 @@ class Simulation:
         self.__psHours = False
         self.__tsHours = False
         
+        self.zorder = zorder
+        
     def getColor(self):
         return self.color
     
@@ -34,6 +36,9 @@ class Simulation:
     
     def getLineWidth(self):
         return self.linewidth
+    
+    def getZorder(self):
+        return self.zorder
         
     def getNCDataset(self):
         if self.nc is None:
@@ -82,6 +87,9 @@ class Simulation:
     
     def setPSDataset(self,ps):
         self.ps = ps
+    
+    def setZorder(self, zorder):
+        self.zorder = zorder
         
     def sliceByTimeNCDataset(self,timeStart, timeEnd):
         
