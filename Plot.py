@@ -38,12 +38,16 @@ class Plot:
             for simulationInstance in simulation:
                 ax = Plot.getTimeseries(ax, simulationInstance, muuttuja, conversionFactor)
             return ax
-        
-        ts = simulation.getTSDataset()
+        try:
+            ts = simulation.getTSDataset()
+        except FileNotFoundError:
+            print("FileNotFoundError: Data from {0} not found in {1}. \
+                  Continue with existing data".format(simulation.getLabel(), simulation.getFolder()))
+            return ax
         try:
             dataset = ts[muuttuja]
         except KeyError:
-            print("KeyError", simulation)
+            print("KeyError", simulation.getLabel(), simulation.getFolder())
             return None
         
         # conversion

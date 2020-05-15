@@ -39,6 +39,9 @@ class Simulation:
     
     def getZorder(self):
         return self.zorder
+    
+    def getFolder(self):
+        return self.folder
         
     def getNCDataset(self):
         if self.nc is None:

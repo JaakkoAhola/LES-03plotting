@@ -48,14 +48,11 @@ class InputSimulation:
         
         return collection
     
-    def __createSimulationColorCollection( labelCollection, colorCollection, dtype = "|S7" ):
+    def __createSimulationColorCollection( labelCollection, colorCollection ):
         
-        simulationColorCollection = numpy.zeros( numpy.shape( labelCollection ), dtype=dtype )
+        simulationColorCollection = [ colorCollection[label]   for ind,label in enumerate(labelCollection) ]
         
-        for ind, label in enumerate(labelCollection):
-            simulationColorCollection[ind] = colorCollection[label]
-        
-        return list(simulationColorCollection)
+        return simulationColorCollection
 
     
     def __initSimulationDataFrame(self):
