@@ -9,6 +9,7 @@ Created on Fri Jan 10 13:20:28 2020
 import datetime
 import math
 import numpy
+import pandas
 
 from collections import defaultdict
 
@@ -184,3 +185,41 @@ class Data:
         return returnable
     def date(format="%Y-%m-%d"):
         return datetime.datetime.utcnow().strftime(format)
+    
+    def mergeDataFrameWithParam(dataFrame, paramDict, paramName):
+        for ind, case in enumerate(list(dataFrame)):
+            paramDataFrame  = pandas.DataFrame({"ID":list(paramDict[case]),
+                                  paramName : list(paramDict[case].values())})
+            del dataFrame[case]["ID"]
+            dataFrame[case] =  pandas.merge( dataFrame[case],
+                                                            paramDataFrame, on ="ID" )
+        
+        return dataFrame
+    
+    def outliersFromDataFrame(dataframe : pandas.DataFrame , variable : str, outlierFrac : float):
+        
+        low = dataframe[variable].quantile( outlierFrac )
+        high  = dataframe[variable].quantile(1.-outlierFrac)
+        
+        if high < low:
+            apu = low
+            low = high
+            high = apu
+            
+        
+        
+        return dataframe[( dataframe[variable] < low ) | (dataframe[variable] > high  )]
+    
+    
+    def midQuantileFromDataFrame(dataframe : pandas.DataFrame , variable : str, outlierFrac : float): #variable  < 0.5
+        
+        low = dataframe[variable].quantile( outlierFrac )
+        high  = dataframe[variable].quantile(1.-outlierFrac)
+        
+        if high < low:
+            apu = low
+            low = high
+            high = apu
+    
+        
+        return dataframe[( dataframe[variable] >  low ) & ( dataframe[variable] < high  )]
