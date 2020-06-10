@@ -240,7 +240,14 @@ class PlotTweak:
         
     def setAxesOff(ax):
         ax.axis('off')
-
+        
+    def getPatches(collectionOfLabelsColors):
+        legend_elements = []
+        for label, color in collectionOfLabelsColors.items():
+            legend_elements.append( matplotlib.patches.Patch( label=label,
+                                                              facecolor=color))
+        return legend_elements
+    
     def useLegend(ax = None, loc = "best"):
         if ax is None:
             matplotlib.pyplot.legend(loc = loc)
