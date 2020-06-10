@@ -148,12 +148,12 @@ class PlotTweak:
         
         shownLabelsBoolean = Data.getMaskedList(ticks, shownLabels)
         
-        PlotTweak._hideLabels(ax_axis, shownLabelsBoolean)
+        PlotTweak.hideLabels(ax_axis, shownLabelsBoolean)
         
         return shownLabelsBoolean
         
     # ax_axis is eithery ax.yaxis or colorbar.ax.xaxis or colorbar.ax.yaxis
-    def _hideLabels(ax_axis, shownLabelsBoolean):
+    def hideLabels(ax_axis, shownLabelsBoolean):
         k = 0
         for label in ax_axis.get_ticklabels():
             label.set_visible(shownLabelsBoolean[k])

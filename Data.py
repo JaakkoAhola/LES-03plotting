@@ -7,6 +7,7 @@ Created on Fri Jan 10 13:20:28 2020
 @licence: MIT licence Copyright
 """
 import datetime
+import itertools
 import math
 import numpy
 import pandas
@@ -223,3 +224,14 @@ class Data:
     
         
         return dataframe[( dataframe[variable] >  low ) & ( dataframe[variable] < high  )]
+    
+    def cycleBoolean(numberOfElements, startBoolean = True):
+        cyclableValues = itertools.cycle([ startBoolean, not startBoolean])
+        
+        cycledList = []
+        for i in range(numberOfElements):
+            cycledList.append(next(cyclableValues))
+            
+        return cycledList
+        
+        
