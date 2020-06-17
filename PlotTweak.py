@@ -200,6 +200,16 @@ class PlotTweak:
         
         return r"$" +boldingStart +  "{" + label +  "}{\ } ( " + unit +      ")" + boldingEnd + "$"
     
+    def getLatexLabel(label, useBold = True):
+        if useBold:
+            boldingStart = "\mathbf{"
+            boldingEnd  = "}"
+        else:
+            boldingStart = ""
+            boldingEnd   = ""
+        
+        return r"$" +boldingStart +  "{" + label +  "}{\ }" +  boldingEnd + "$"
+    
     def setXaxisLabel(ax, label, unit = None, useBold = True):
         PlotTweak._setLabel(ax.set_xlabel, label, unit, useBold)
     
