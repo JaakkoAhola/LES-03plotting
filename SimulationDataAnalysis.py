@@ -16,7 +16,7 @@ from Data import Data
 
 class SimulationDataAnalysis:
     
-    def __init__(self, simulation : Simulation, variableName):
+    def __init__(self, simulation : Simulation, variableName, auxKey = None):
         
         self.simulation = simulation
         
@@ -29,6 +29,8 @@ class SimulationDataAnalysis:
         self.sizeBinName = None
 
         self.sizeBinNameGroupedByBins = None
+        
+        self.auxKey = auxKey
 
     def getFilteredVariableName(self):
         return self.filteredVariableName
@@ -54,6 +56,17 @@ class SimulationDataAnalysis:
         
         ps[self.filteredPackedVariableName] =  ps[self.filteredVariableName].groupby_bins( self.sizeBinName, bins).sum()
     
+    def packFilteredAUXVariablewithSizeBinCoords(self, packing):
+        
+        dataset = self.simulation.getAUXDataset(self.auxKey)
+        
+        bins =  Data.getBinLimitsWithPackingStartingWithLastOnes( dataset[self.sizeBinName].values, packing)
+        
+        self.packedVariableName = self.variableName + "_packed"
+        
+        self.sizeBinNameGroupedByBins = self.sizeBinName + "_bins"
+        
+        dataset[self.packedVariableName] =  dataset[self.variableName].groupby_bins( self.sizeBinName, bins).sum()
         
     def renamePSCoordSizeBinA(self):
         self.__renamePSCoordSizeBin(["aea", "cla", "ica"], "SizeBinA" )
@@ -67,7 +80,7 @@ class SimulationDataAnalysis:
         
         oldName = None
         for k in coordList:
-            if k in data.coords:
+            if k in list(data.coords):
                 oldName = k
                 break
             else:
@@ -77,7 +90,35 @@ class SimulationDataAnalysis:
             self.sizeBinName = newName
             ps[self.filteredVariableName] = data.rename( {oldName:self.sizeBinName})
         else:
-            sys.exit("renamePSVariableSizeBinBCoord", self, "old coordinate is not suitable for", self.sizeBinName)
+            print("EXITING","renamePSVariableSizeBinBCoord", self, "old coordinate is not suitable for", self.sizeBinName)
+            sys.exit()
+
+    def renameAUXCoordSizeBinA(self):
+        self.__renameAUXCoordSizeBin(["aea", "cla", "ica"], "SizeBinA" )
+            
+    def renameAUXCoordSizeBinB(self):
+        self.__renameAUXCoordSizeBin( ["aeb", "clb", "icb", "ica"], "SizeBinB" )
+        
+    def __renameAUXCoordSizeBin(self, coordList, newName):
+        data = self.simulation.getAUXDataset(self.auxKey)[self.variableName]
+        
+        oldName = None
+        for k in coordList:
+            
+            if k in list(data.coords):
+                
+                oldName = k
+                break
+            else:
+                continue
+        
+        if oldName is not None:
+            self.sizeBinName = newName
+            dataRenamed =  data.rename( {oldName:self.sizeBinName})
+            self.simulation.updateAUXDataset(self.auxKey, dataRenamed.to_dataset())
+        else:
+            print("EXITING", "renameAUXVariableSizeBinBCoord", self, "old coordinate is not suitable for", self.sizeBinName)
+            sys.exit()            
             
     
     def __getFilteredStatus(self):

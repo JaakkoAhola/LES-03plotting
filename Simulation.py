@@ -28,6 +28,9 @@ class Simulation:
         
         self.zorder = zorder
         
+        self.AUXDatasets = {}
+        self.__AuxHours = False
+        
     def getColor(self):
         return self.color
     
@@ -61,6 +64,17 @@ class Simulation:
         
         
         return self.ts
+    
+    def setAUXDataset(self, key, filename):
+        
+        self.AUXDatasets[key] = xarray.open_dataset( self.folder / filename )
+    
+    def updateAUXDataset(self, key, dataset):
+        self.AUXDatasets[key] = dataset
+    
+    def getAUXDataset(self, key):
+        return self.AUXDatasets[key]
+        
     
     def _getDataset(self, ncMode):
     
@@ -105,7 +119,10 @@ class Simulation:
     def sliceByTimeTSDataset(self,timeStart, timeEnd):
         
         self.ts = self.__sliceByTimeDataset(self.getPSDataset(), timeStart, timeEnd)    
-        
+    
+    def sliceByTimeAUXDataset(self, timeStart, timeEnd):
+        for key in self.AUXDatasets:
+            self.AUXDatasets[key] = self.__sliceByTimeDataset(self.AUXDatasets[key], timeStart, timeEnd)
         
     
     def __sliceByTimeDataset(self, dataSet, timeStart, timeEnd):
@@ -158,6 +175,10 @@ class Simulation:
         if self.ts is not None and (not self.__tsHours):
             self.ts = self.ts.assign_coords(time = (self.ts.time / 3600))
             self.__tsHours = True
+        if bool(self.AUXDatasets) and (not self.__AuxHours):
+            for key in self.AUXDatasets:
+                self.AUXDatasets[key] = self.AUXDatasets[key].assign_coords(time = (self.AUXDatasets[key].time / 3600))
+                self.__AuxHours = True
     
     def setLineWidth(self, linewidth):
         self.linewidth = linewidth
