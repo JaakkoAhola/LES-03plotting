@@ -33,10 +33,12 @@ class Figure:
         if figsize is None:
             if width is None:
                 width = 12/inchInCM
-            figsize = [width, width*nrows/ncols/aspectRatio]
+            self.figsize = [width, width*nrows/ncols/aspectRatio]
+        else:
+            self.figsize = figsize
         
         
-        self.fig = matplotlib.pyplot.figure(figsize=figsize, constrained_layout=False)
+        self.fig = matplotlib.pyplot.figure(figsize=self.figsize, constrained_layout=False)
         self.grid = matplotlib.gridspec.GridSpec(nrows, ncols,
                                             wspace=wspace, hspace=hspace, 
                                             top = top, left = left, right = right, bottom = bottom)
@@ -64,7 +66,8 @@ class Figure:
         
         return self.axesList[ind] #matplotlib.pyplot.subplot( self.grid[yCoord,xCoord] )
         
-        
+    def getFigSize(self):
+        return self.figsize
     
     def getOldContextValues(self):
         return self.oldContextValues
