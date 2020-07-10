@@ -232,6 +232,24 @@ class PlotTweak:
         
         return logaritmicTicks
 
+
+    def getXPosition(ax, xFrac):
+        xmin = ax.get_xlim()[0]
+        xmax = ax.get_xlim()[1]
+        
+        xPos = xFrac*(xmax-xmin) + xmin
+        
+        return xPos
+    
+    def getYPosition(ax, yFrac):
+        ymin = ax.get_ylim()[0]
+        ymax = ax.get_ylim()[1]
+        
+    
+        yPos = yFrac*(ymax-ymin) + ymin
+        
+        return yPos
+    
     def setXLim(ax, start = 0, end = 1):
         ax.set_xlim( start ,end )
 
