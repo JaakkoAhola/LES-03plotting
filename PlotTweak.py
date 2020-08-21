@@ -210,6 +210,24 @@ class PlotTweak:
         
         return r"$" +boldingStart +  "{" + label +  "}{\ }" +  boldingEnd + "$"
     
+    def getMathLabel(label):
+        dictionary = {"q_inv":"\Delta q_{L}",
+                      "tpot_inv":"\Delta  {\Theta}_{L}",
+                      "tpot_pbl":"{\Theta}_{L}"                              ,
+                      "pblh":"PBLH",
+                      "lwp": "LWP",
+                      "cdnc": "cdnc",
+                      "cos_mu": "cos_{mu}",
+                      "ks": "ks",
+                      "as":"as",
+                      "cs":"cs",
+                      "rdry_AS_eff":"r_{eff.dry.as}"}
+        
+        mathlabel = dictionary[label]
+        if "{" in mathlabel:
+            mathlabel = PlotTweak.getLatexLabel(mathlabel)
+        return mathlabel
+    
     def setXaxisLabel(ax, label, unit = None, useBold = True):
         PlotTweak._setLabel(ax.set_xlabel, label, unit, useBold)
     
