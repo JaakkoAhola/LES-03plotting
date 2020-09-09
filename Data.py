@@ -234,4 +234,8 @@ class Data:
             
         return cycledList
         
-        
+    def roundUp(number, scale):
+        return int(round((number + scale)/scale,0)*scale)
+    
+    def roundDown(number, scale):
+        return int(round((number - scale)/scale,0)*scale)
