@@ -212,8 +212,8 @@ class PlotTweak:
     
     def getMathLabel(label):
         dictionary = {"q_inv":"\Delta q_{L}",
-                      "tpot_inv":"\Delta  {\Theta}_{L}",
-                      "tpot_pbl":"{\Theta}_{L}"                              ,
+                      "tpot_inv":r"\Delta  {\theta}_{L}",
+                      "tpot_pbl":r"{\theta}_{L}"                              ,
                       "pblh":"PBLH",
                       "lwp": "LWP",
                       "cdnc": "cdnc",

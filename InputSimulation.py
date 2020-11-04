@@ -79,7 +79,12 @@ class InputSimulation:
                                                                                     simulationDataFrame.iloc[i]["LABEL"],
                                                                                     simulationDataFrame.iloc[i]["COLOR"])
         return simulationCollection
-    
+
+    def getSimulationDataFrame(self):
+        return self.simulationDataFrame
+
+    def setSimulationDataFrame(self, simulationDataFrame):
+        self.simulationDataFrame = simulationDataFrame
     
     def __checkObj(self):
         checkType, checkLength = InputSimulation.__checkLists([self.idCollection, self.folderCollection, self.labelCollection, self.colorCollection])

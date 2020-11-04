@@ -117,7 +117,7 @@ class Figure:
 #        if printing: print("text.latex.unicode", matplotlib.rcParams['text.latex.unicode'])
 #        matplotlib.rcParams['text.latex.preamble']=[r'\usepackage{amsmath}']
         matplotlib.rc('text', usetex = False)
-    
+        matplotlib.rcParams["lines.markeredgewidth"] = 1.4
     def setAdjusting(self, hspace = 0.05, wspace = 0.05, left = None, right = None, top = None, bottom = None):
         self.fig.subplots_adjust( hspace=hspace, wspace = wspace, left = left, right = right, top = top, bottom = bottom)
         

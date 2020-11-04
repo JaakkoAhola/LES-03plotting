@@ -112,13 +112,19 @@ class Simulation:
         
         self.nc = self.__sliceByTimeDataset( self.getNCDataset(), timeStart, timeEnd)
         
+        return self.nc
+        
     def sliceByTimePSDataset(self,timeStart, timeEnd):
         
         self.ps = self.__sliceByTimeDataset(self.getPSDataset(),timeStart, timeEnd)
         
+        return self.ps
+        
     def sliceByTimeTSDataset(self,timeStart, timeEnd):
         
         self.ts = self.__sliceByTimeDataset(self.getPSDataset(), timeStart, timeEnd)    
+        
+        return self.ts
     
     def sliceByTimeAUXDataset(self, timeStart, timeEnd):
         for key in self.AUXDatasets:

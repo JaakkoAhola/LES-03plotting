@@ -16,6 +16,9 @@ from collections import defaultdict
 
 
 class Data:
+    
+    def getEpsilon():
+        return numpy.finfo(float).eps
 
     def getClosestIndex(dataarray, searchValue):
         return numpy.argmin(numpy.abs(searchValue- dataarray))
