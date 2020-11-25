@@ -9,6 +9,7 @@ Created on Mon Jan 20 12:28:17 2020
 import numpy
 import pandas
 import pathlib
+import sys
 
 from FileSystem import FileSystem
 from Simulation import Simulation
@@ -74,10 +75,16 @@ class InputSimulation:
     
     def getSimulationCollection(simulationDataFrame): #public
         simulationCollection = {}
-        for i in range(simulationDataFrame.shape[0]):
-            simulationCollection[ simulationDataFrame.iloc[i]["ID"] ] = Simulation( simulationDataFrame.iloc[i]["FOLDER"],
-                                                                                    simulationDataFrame.iloc[i]["LABEL"],
-                                                                                    simulationDataFrame.iloc[i]["COLOR"])
+        
+        if not ( simulationDataFrame.index.name == "ID"):
+            try:
+                simulationDataFrame.set_index("ID", inplace = True)
+            except KeyError:
+                sys.exit("ID missing from simulationDataFrame")
+        for ind in simulationDataFrame.index:
+            simulationCollection[ ind ] = Simulation( simulationDataFrame.loc[ind]["FOLDER"],
+                                                                                    simulationDataFrame.loc[ind]["LABEL"],
+                                                                                    simulationDataFrame.loc[ind]["COLOR"])
         return simulationCollection
 
     def getSimulationDataFrame(self):

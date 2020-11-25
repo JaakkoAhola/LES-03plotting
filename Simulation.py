@@ -48,7 +48,7 @@ class Simulation:
         
     def getNCDataset(self):
         if self.nc is None:
-            self.nc = self._getDataset("nc")
+            self.nc = self._getDataset("")
                 
         return self.nc
     
@@ -86,9 +86,12 @@ class Simulation:
             if ncMode != "":
                 if ncModeSuffix in ncFile.suffixes:
                     fileAbs = ncFile
+                    break
             else:
                 if ".ps" not in ncFile.suffixes and ".ts" not in ncFile.suffixes:
                     fileAbs = ncFile
+                    break
+                    
         if fileAbs is not None:
             dataset = xarray.open_dataset(fileAbs)
         else:

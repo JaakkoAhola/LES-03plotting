@@ -10,13 +10,102 @@ import datetime
 import itertools
 import math
 import numpy
+import operator
 import pandas
+
+
 
 from collections import defaultdict
 
 
 class Data:
+    def getAllConditions( condition : dict ):
+        allConditions = None
+        for ind, key in enumerate(list(condition)):
+            if ind == 0:
+                allConditions = condition[key]
+            else:
+                allConditions = allConditions & condition[key]
+        
+        return allConditions
     
+    def getORConditions( condition : dict ):
+        allConditions = None
+        for ind, key in enumerate(list(condition)):
+            if ind == 0:
+                allConditions = condition[key]
+            else:
+                allConditions = allConditions | condition[key]
+        
+        return allConditions
+    
+    def getNLengthSubsetConditions( condition : dict, n :int):
+        allSubsets = Data.getNLengthSubsetsOfList(list(condition), n)
+        
+        orSubsetConditions = None
+        
+        for ind, subset in enumerate(allSubsets):
+            subsetDictionary = Data.subdict(condition, subset)
+            
+            subsetCondition = Data.getAllConditions(subsetDictionary)
+            
+            if ind == 0:
+                orSubsetConditions  = subsetCondition
+            else:
+                orSubsetConditions = orSubsetConditions | subsetCondition
+            
+        return orSubsetConditions
+            
+            
+        
+    
+    def listAll2ChoicesFromList(lista : list, n : int):
+        choices = []
+        
+        for ind1, key1 in enumerate(lista[:-1]):
+            for ind2, key2 in enumerate(lista[ind1+1:]):
+                choices.append([key1, key2])
+        return choices
+    
+    def getNLengthSubsetsOfList(arr : list, k : int):
+        subsets = []
+        # Function to find all subsets of given set. 
+        # Any repeated subset is considered only  
+        # once in the output 
+        _list = [] 
+        n = len(arr)
+        # Run counter i from 000..0 to 111..1 
+        for i in range(2**n): 
+            subset = []
+    
+            # consider each element in the set 
+            for j in range(n): 
+    
+                # Check if jth bit in the i is set.  
+                # If the bit is set, we consider  
+                # jth element from set 
+                if (i & (1 << j)) != 0: 
+                    subset.append(arr[j])
+    
+            # if subset is encountered for the first time 
+            # If we use set<string>, we can directly insert 
+            if subset not in _list and len(subset) > 0: 
+                _list.append(subset) 
+        # print(_list)
+        # consider every subset 
+        for subset in _list: 
+            if len(subset) == k:
+                subsets.append(subset)
+        return subsets
+    
+    def subdict(dictionary, keys):
+        vals = []
+        if len(keys) >= 1:
+            vals = operator.itemgetter(*keys)(dictionary)
+        if len(keys) == 1:
+            vals = [vals]
+        return dict(zip(keys, vals))
+        
     def getEpsilon():
         return numpy.finfo(float).eps
 
