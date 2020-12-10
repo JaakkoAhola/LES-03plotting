@@ -331,3 +331,40 @@ class Data:
     
     def roundDown(number, scale):
         return int(round((number - scale)/scale,0)*scale)
+    
+    def timeDuration(durationSeconds) -> str:
+        durationStr = ""
+        secondsUnitConversion = numpy.asarray([24,60,60])
+        
+        days = divmod(durationSeconds, numpy.prod(secondsUnitConversion))
+        hours = divmod(days[1], numpy.prod(secondsUnitConversion[1:]))
+        minutes = divmod(hours[1], numpy.prod(secondsUnitConversion[2:]))
+        seconds = minutes[1]
+        
+        days = days[0]
+        hours = hours[0]
+        minutes = minutes[0]
+        
+        daysUsed = days >= 1
+        hoursUsed = hours >= 1
+        minutesUsed = minutes >= 1
+        
+        if daysUsed:
+            
+            durationStr += f"{days:.0f} days"
+        
+        if hoursUsed: 
+            intermezzo = " " if daysUsed else ""
+            durationStr += f"{intermezzo}{hours:.0f} hours"
+        
+        if minutesUsed:
+            intermezzo = " " if (daysUsed or hoursUsed) else ""
+                
+            durationStr += f"{intermezzo}{minutes:.0f} minutes"
+        
+        intermezzo = " " if (hoursUsed or minutesUsed) else ""
+        durationStr += f"{intermezzo}{seconds:.1f} seconds"
+        
+        return durationStr
+        
+        
