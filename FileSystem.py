@@ -6,15 +6,13 @@ Created on Fri Jan 10 13:22:16 2020
 @author: Jaakko Ahola, Finnish Meteorological Institute
 @licence: MIT licence Copyright
 """
-import os
 import pathlib
 import yaml
 
 class FileSystem:
     def createSubfolder(rootfolderName, subfolderName):
-        subfolder = os.path.join( rootfolderName, subfolderName)
-        if not os.path.exists( subfolder ):
-            os.makedirs( subfolder )
+        subfolder = pathlib.Path(rootfolderName) / subfolderName
+        subfolder.mkdir( parents=True, exist_ok = True )
         
         return subfolder
     
