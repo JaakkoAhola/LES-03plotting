@@ -121,6 +121,7 @@ class InputSimulation:
             absFile = folder
         else:
             absFile = pathlib.Path(folder) / file
+        absFile.parent.mkdir( parents=True, exist_ok = True )
         self.simulationDataFrame.to_csv(absFile)
         
         return absFile
