@@ -39,6 +39,16 @@ class Data:
         
         return allConditions
     
+    def getNANDConditions( condition : dict ):
+        allConditions = None
+        for ind, key in enumerate(list(condition)):
+            if ind == 0:
+                allConditions = ~ condition[key]
+            else:
+                allConditions = allConditions & ( ~ condition[key])
+        
+        return allConditions
+    
     def getNLengthSubsetConditions( condition : dict, n :int):
         allSubsets = Data.getNLengthSubsetsOfList(list(condition), n)
         
