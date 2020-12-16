@@ -20,6 +20,11 @@ class Simulation:
         self.nc = None
         self.ps = None
         self.ts = None
+        
+        self.ncFilename = None
+        self.psFilename = None
+        self.tsFilename = None
+        
         self.linewidth = linewidth
         
         self.__ncHours = False
@@ -45,24 +50,35 @@ class Simulation:
     
     def getFolder(self):
         return self.folder
+    
+    def getNCDatasetFileName(self):
+        if self.ncFilename is None:
+            self.ncFilename = self._getDatasetFileName("")
+        return self.ncFilename
+    
+    def getPSDatasetFileName(self):
+        if self.psFilename is None:
+            self.psFilename = self._getDatasetFileName("ps")
+        return self.psFilename
+    
+    def getTSDatasetFileName(self):
+        if self.tsFilename is None:
+            self.tsFilename = self._getDatasetFileName("ts")
+        return self.tsFilename
         
     def getNCDataset(self):
         if self.nc is None:
-            self.nc = self._getDataset("")
-                
+            self.nc = xarray.open_dataset(self.getNCDatasetFileName())
         return self.nc
     
     def getPSDataset(self):
         if self.ps is None:
-            self.ps = self._getDataset("ps")
-        
+            self.ps = xarray.open_dataset(self.getPSDatasetFileName())
         return self.ps
     
     def getTSDataset(self):
         if self.ts is None:
-            self.ts = self._getDataset("ts")
-        
-        
+            self.ts = xarray.open_dataset(self.getTSDatasetFileName())
         return self.ts
     
     def setAUXDataset(self, key, filename):
@@ -98,6 +114,22 @@ class Simulation:
             raise FileNotFoundError(ncMode, "file not found from", self.folder)
         
         return dataset
+    
+    def _getDatasetFileName(self, ncMode):
+        if "." not in ncMode:
+            ncModeSuffix = "." + ncMode
+        
+        fileAbs = None
+        for ncFile in list(self.folder.glob("*.nc")):
+            if ncMode != "":
+                if ncModeSuffix in ncFile.suffixes:
+                    fileAbs = ncFile
+                    break
+            else:
+                if ".ps" not in ncFile.suffixes and ".ts" not in ncFile.suffixes:
+                    fileAbs = ncFile
+                    break
+        return fileAbs
     
     def setNCDataset(self, nc):
         self.nc = nc
@@ -136,7 +168,7 @@ class Simulation:
     
     def __sliceByTimeDataset(self, dataSet, timeStart, timeEnd):
         timeStartInd = Data.getClosestIndex( dataSet.time.values, timeStart )
-        timeEndInd   = Data.getClosestIndex( dataSet.time.values, timeEnd )
+        timeEndInd   = Data.getClosestIndex( dataSet.time.values, timeEnd ) + 1
         
         return  dataSet.isel(time = slice(timeStartInd,timeEndInd))
 
