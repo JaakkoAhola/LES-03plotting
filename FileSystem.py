@@ -16,6 +16,22 @@ class FileSystem:
         
         return subfolder
     
+    def makeFolder(folder):
+        """
+        Parameters
+        ----------
+        folder :  : pathlib.Path
+            
+        
+        creates folder and its parents
+
+        Returns
+        -------
+        None.
+
+        """
+        folder.mkdir( parents=True, exist_ok = True )
+    
     def readYAML(absoluteFilePath):
         with open(absoluteFilePath, "r") as stream:
             try:
