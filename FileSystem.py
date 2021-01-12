@@ -40,5 +40,13 @@ class FileSystem:
                 print(exc)
         return output
     
+    def writeYAML(absoluteFilePath, data):
+        with open(absoluteFilePath, "w") as stream:
+            try:
+                yaml.dump(data, stream)
+            except yaml.YAMLError as exc:
+                print(exc)
+            
+    
     def getAbsoluteFilename(folder, file):
         return pathlib.Path(folder) / file
