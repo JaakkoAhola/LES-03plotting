@@ -376,5 +376,17 @@ class Data:
         durationStr += f"{intermezzo}{seconds:.1f} seconds"
         
         return durationStr
+    
+    def confidenceInterval(data, level = 1):
+        if level == 1: #95%
+            rate = 1.96
+        elif level == 2: #99%
+            rate = 2.58
+        elif level == 3: #99.9%
+            rate = 3.29
+        mean = data.mean()
+        diff = rate*data.std() / math.sqrt(data.count())
+        low = mean - diff
+        high = mean + diff
         
-        
+        return [low,high]
