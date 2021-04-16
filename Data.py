@@ -390,3 +390,6 @@ class Data:
         high = mean + diff
         
         return [low,high]
+
+    def getNthLetter(ind):
+        return chr(ord('a') + ind)
