@@ -47,9 +47,12 @@ class Figure:
         
         self.axesList = []
         
+        self.axesPseudoList = []
+        
         for yCoord in range(nrows):
             for xCoord in range(ncols):
                 self.axesList.append(matplotlib.pyplot.subplot( self.grid[yCoord,xCoord] ))
+                self.axesPseudoList.append([yCoord,xCoord])
         
         self.oldContextValues = {}
     
@@ -65,7 +68,10 @@ class Figure:
         # xCoord = coordIndexes[1].item()
         
         return self.axesList[ind] #matplotlib.pyplot.subplot( self.grid[yCoord,xCoord] )
-        
+    def getAxesGridPoint(self, point : dict):
+        ind = self.axesPseudoList.index([point["row"], point["col"]])
+        return self.axesList[ind]
+    
     def getFigSize(self):
         return self.figsize
     
