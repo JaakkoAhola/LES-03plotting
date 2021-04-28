@@ -217,16 +217,33 @@ class PlotTweak:
                       "pblh":"PBLH",
                       "lwp": "LWP",
                       "cdnc": "cdnc",
-                      "cos_mu": "cos_{mu}",
+                      "cos_mu": "cos_{\mu}",
                       "ks": "ks",
                       "as":"as",
                       "cs":"cs",
-                      "rdry_AS_eff":"r_{eff.dry.as}"}
+                      "rdry_AS_eff":"r_{eff}",
+                      "w2pos_linearFit": "w_{lin.fit}"}
         
         mathlabel = dictionary[label]
         if "{" in mathlabel:
             mathlabel = PlotTweak.getLatexLabel(mathlabel)
         return mathlabel
+    
+    def getLabelColor(label):
+        dictionary = {"q_inv":"#42d4f4",
+                      "tpot_inv":"#f58231",
+                      "tpot_pbl":"#e6194B",
+                      "pblh":"#9A6324",
+                      "lwp": "#4363d8",
+                      "cdnc": "#3cb44b",
+                      "cos_mu": "#ffe119",
+                      "ks": "#911eb4",
+                      "as":"#f032e6",
+                      "cs":"#dcbeff",
+                      "rdry_AS_eff":"#fabed4",
+                      "w2pos_linearFit": "#469990"}
+        
+        return dictionary[label]
     
     def setXaxisLabel(ax, label, unit = None, useBold = True):
         PlotTweak._setLabel(ax.set_xlabel, label, unit, useBold)
