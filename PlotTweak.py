@@ -218,9 +218,9 @@ class PlotTweak:
                       "lwp": "LWP",
                       "cdnc": "cdnc",
                       "cos_mu": "cos_{\mu}",
-                      "ks": "ks",
-                      "as":"as",
-                      "cs":"cs",
+                      "ks": "N_{ks}",
+                      "as":"N_{as}",
+                      "cs":"N_{cs}",
                       "rdry_AS_eff":"r_{eff}",
                       "w2pos_linearFit": "w_{lin.fit}"}
         
