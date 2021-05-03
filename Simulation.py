@@ -69,16 +69,25 @@ class Simulation:
     def getNCDataset(self):
         if self.nc is None:
             self.nc = xarray.open_dataset(self.getNCDatasetFileName())
+        else:
+            raise FileNotFoundError(f".nc file not found from {self.folder}")
+            
         return self.nc
     
     def getPSDataset(self):
         if self.ps is None:
             self.ps = xarray.open_dataset(self.getPSDatasetFileName())
+        else:
+            raise FileNotFoundError(f".ps.nc file not found from {self.folder}")
+            
         return self.ps
     
     def getTSDataset(self):
         if self.ts is None:
             self.ts = xarray.open_dataset(self.getTSDatasetFileName())
+        else:
+            raise FileNotFoundError(f".ts.nc file not found from {self.folder}")    
+        
         return self.ts
     
     def setAUXDataset(self, key, filename):
@@ -91,29 +100,6 @@ class Simulation:
     def getAUXDataset(self, key):
         return self.AUXDatasets[key]
         
-    
-    def _getDataset(self, ncMode):
-    
-        if "." not in ncMode:
-            ncModeSuffix = "." + ncMode
-        
-        fileAbs = None
-        for ncFile in list(self.folder.glob("*.nc")):
-            if ncMode != "":
-                if ncModeSuffix in ncFile.suffixes:
-                    fileAbs = ncFile
-                    break
-            else:
-                if ".ps" not in ncFile.suffixes and ".ts" not in ncFile.suffixes:
-                    fileAbs = ncFile
-                    break
-                    
-        if fileAbs is not None:
-            dataset = xarray.open_dataset(fileAbs)
-        else:
-            raise FileNotFoundError(ncMode, "file not found from", self.folder)
-        
-        return dataset
     
     def _getDatasetFileName(self, ncMode):
         if "." not in ncMode:
