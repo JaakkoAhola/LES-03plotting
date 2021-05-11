@@ -295,8 +295,9 @@ class PlotTweak:
                       text,
                       fontsize = 8,
                       xPosition = 0, yPosition = 0,
+                      xycoords = 'data',
                       bbox_props = dict(boxstyle="square,pad=0.1", fc="w", ec="0.5", alpha=0.9)):
-        ax.annotate( text, xy=(xPosition, yPosition), size=fontsize, bbox = bbox_props)
+        ax.annotate( text, xy=(xPosition, yPosition), size=fontsize, bbox = bbox_props, xycoords = xycoords)
 
     def setTightLayot(fig):
         fig.tight_layout()
