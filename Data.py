@@ -394,3 +394,9 @@ returns [False, False, True, False, True]"""
 
     def getNthLetter(ind):
         return chr(ord('a') + ind)
+    
+    def dropInfNanFromDataFrame(dataframe):
+        dataframe.replace([numpy.inf, -numpy.inf], numpy.nan, inplace=True)
+        dataframe = dataframe.dropna()
+
+        return dataframe
