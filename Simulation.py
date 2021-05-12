@@ -10,6 +10,7 @@ import numpy
 import pathlib
 import xarray
 from Data import Data
+import sys
 
 class Simulation:
     
@@ -68,25 +69,28 @@ class Simulation:
         
     def getNCDataset(self):
         if self.nc is None:
-            self.nc = xarray.open_dataset(self.getNCDatasetFileName())
-        else:
-            raise FileNotFoundError(f".nc file not found from {self.folder}")
+            try:
+                self.nc = xarray.open_dataset(self.getNCDatasetFileName())
+            except FileNotFoundError:
+                sys.exit(f".nc file not found from {self.folder}")
             
         return self.nc
     
     def getPSDataset(self):
         if self.ps is None:
-            self.ps = xarray.open_dataset(self.getPSDatasetFileName())
-        else:
-            raise FileNotFoundError(f".ps.nc file not found from {self.folder}")
+            try:
+                self.ps = xarray.open_dataset(self.getPSDatasetFileName())
+            except FileNotFoundError:
+                sys.exit(f".ps.nc file not found from {self.folder}")
             
         return self.ps
     
     def getTSDataset(self):
         if self.ts is None:
-            self.ts = xarray.open_dataset(self.getTSDatasetFileName())
-        else:
-            raise FileNotFoundError(f".ts.nc file not found from {self.folder}")    
+            try:
+                self.ts = xarray.open_dataset(self.getTSDatasetFileName())
+            except FileNotFoundError:
+                sys.exit(f".ts.nc file not found from {self.folder}")    
         
         return self.ts
     
