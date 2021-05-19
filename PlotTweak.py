@@ -13,92 +13,7 @@ import time
 from Data import Data
 
 class PlotTweak:
-    # DELETE
-    def hideXLabels(ax, xLabelListShowBoolean, xLabelListMajorLineBoolean):
-        k = 0
-        for label in ax.xaxis.get_ticklabels():
-            label.set_visible(xLabelListShowBoolean[k])
-            k = k + 1
-        
-        k = 0
-        for line in ax.xaxis.get_ticklines()[0::2]:
-            if xLabelListMajorLineBoolean[k]:
-                line.set_markersize(matplotlib.rcParams["xtick.major.size"])
-            else:
-                line.set_markersize(matplotlib.rcParams["xtick.minor.size"])
-            k= k + 1
-
-        return ax
-    
-    # DELETE
-    def hideYLabels(ax, param):
-    
-        k = 0
-        for label in ax.yaxis.get_ticklabels():
-            if numpy.mod(k,param) != 0:
-                label.set_visible(False)
-            k+=1
-        
-        return ax
-    
-    # DELETE    
-    def hideColorbarXLabels(cbar, colorbarLabelListShowBoolean):
-        k = 0
-        for label in cbar.ax.xaxis.get_ticklabels():
-            label.set_visible(colorbarLabelListShowBoolean[k])
-            k = k + 1
-        
-        return cbar
-    
-    # DELETE    
-    def hideColorbarYLabels(cbar, colorbarLabelListShowBoolean):
-        k = 0
-        for label in cbar.ax.yaxis.get_ticklabels():
-            label.set_visible(colorbarLabelListShowBoolean[k])
-            k = k + 1
-    
-    # DELETE
-    def setXTicksLabelsAsTimeOld(ax, timeHvalues, tickInterval = 16, unit = "h", startPoint = 0,  xLabelListShow = None, xLabelListMajorLine = None, setXlabel = True):
-        first = timeHvalues[0]
-        last = timeHvalues[-1]
-        xticks = numpy.arange(first,last+0.1, 0.5) 
-        #xticks = xticks[::tickInterval]
-        xticklabels = [ str(int(round(elem,1))) for elem in list(xticks) ]
-        #print(xticks)
-        ax.set_xticks( xticks )
-        ax.set_xticklabels(xticklabels)
-        
-        timesize = numpy.shape(xticks)[0]
-        #####################
-        if xLabelListShow is None:
-            xLabelListShowBoolean = [False]*timesize
-            #timesize = numpy.shape(timeHvalues)[0]
-            
-            for i in range(timesize):
-                if numpy.mod(i, tickInterval) == 0:
-                    xLabelListShowBoolean[i] = True
-        else:
-            xLabelListShowBoolean = Data.getMaskedList( xticks, xLabelListShow)
-        #############################
-        if xLabelListMajorLine is None:
-            xLabelListMajorLineBoolean = [False]*timesize
-            
-            for i in range(timesize):
-                if numpy.mod(i, tickInterval) == 0:
-                    xLabelListMajorLineBoolean[i] = True
-        else:
-            xLabelListMajorLineBoolean = Data.getMaskedList( xticks, xLabelListMajorLine)
-        
-            
-        ax = PlotTweak.hideXLabels(ax, xLabelListShowBoolean, xLabelListMajorLineBoolean)
-        
-        if setXlabel:
-            ax.set_xlabel(r"$\mathbf{time (" + unit + ")}$") 
-        else:
-            ax.set_xlabel(None)
-        ax.set_xlim( first ,last )
-    
-        return ax #DELETE ENDS
+  
     
     def setXticks(ax, ticks = None, start = 0, end = 8, interval = 0.5, integer = True):
         if ticks is None:
@@ -122,8 +37,11 @@ class PlotTweak:
         
         return ticks
     
-    # axset  is in [ax.set_xticks, ax.set_yticks, ]
+    
     def _setTicks(axset, ticks):
+        """
+        axset  is in [ax.set_xticks, ax.set_yticks, ]
+        """
         axset(ticks)
         return ticks
     
@@ -152,8 +70,11 @@ class PlotTweak:
         
         return shownLabelsBoolean
         
-    # ax_axis is eithery ax.yaxis or colorbar.ax.xaxis or colorbar.ax.yaxis
+    
     def hideLabels(ax_axis, shownLabelsBoolean):
+        """
+        ax_axis is eithery ax.yaxis or colorbar.ax.xaxis or colorbar.ax.yaxis
+        """
         k = 0
         for label in ax_axis.get_ticklabels():
             label.set_visible(shownLabelsBoolean[k])
@@ -178,10 +99,12 @@ class PlotTweak:
         
         PlotTweak._setTickSizes(ax.yaxis, labelListMajorLineBoolean, majorFontsize, minorFontSize)
     
-    # ax_axis is eithery ax.yaxis or colorbar.ax.xaxis or colorbar.ax.yaxis
     def _setTickSizes(ax_axis, labelListMajorLineBoolean,
                   majorFontsize,
                   minorFontSize):
+        """
+        # ax_axis is eithery ax.yaxis or colorbar.ax.xaxis or colorbar.ax.yaxis
+        """
         k = 0
         for line in ax_axis.get_ticklines()[0::2]:
             if labelListMajorLineBoolean[k]:
@@ -362,62 +285,6 @@ class PlotTweak:
         artist = ax.legend( handles=legend_elements, loc=loc, frameon = True, framealpha = framealpha, fontsize = fontsize, ncol = ncol )
         
         ax.add_artist(artist)
-        
-    # setSuperWrapper    
-    # if xticks given, it overwrites xstart, xend, xinterval when getting ticks
-    # if yticks given, it overwrites ystart, yend, yinterval when getting ticks
-    def setSuperWrapper(ax,
-                        xstart = 0, xend = 8, xtickinterval = 0.5, xlabelinterval = 1,
-                        xticks = None,
-                        xShownLabels = None,
-                        xTickMajorFontSize =  matplotlib.rcParams["xtick.major.size"],
-                        xTickMinorFontSize =  matplotlib.rcParams["xtick.minor.size"],
-                        ystart = 0, yend = 100, ytickinterval = 50, ylabelinterval = 5,
-                        yticks = None,
-                        yShownLabels = None,
-                        yTickMajorFontSize =  matplotlib.rcParams["ytick.major.size"],
-                        yTickMinorFontSize =  matplotlib.rcParams["ytick.minor.size"],
-                        annotationText = None,
-                        annotationXPosition = 2,
-                        annotationYPosition = 30,
-                        xlabel = None,
-                        xunit  = None,
-                        ylabel = None,
-                        yunit  = None,
-                        setLegend = False,
-                        useBold = False
-                        ):
-        # set xticks
-        xticks = PlotTweak.setXticks(ax, ticks = xticks, start = xstart, end = xend, interval = xtickinterval) 
-        # set xlabels
-        xShownLabelsBoolean = PlotTweak.setXLabels(ax, xticks, shownLabels = xShownLabels, start = xstart, end = xend, interval = xlabelinterval )
-        # set xtick sizes
-        PlotTweak.setXTickSizes(ax, xShownLabelsBoolean, majorFontsize= xTickMajorFontSize, minorFontSize=xTickMinorFontSize)
-        
-        
-        # set yticks
-        yticks = PlotTweak.setYticks(ax, ticks = yticks, start = ystart, end = yend, interval = ytickinterval) 
-        # set ylabels
-        yShownLabelsBoolean = PlotTweak.setYLabels(ax, yticks, shownLabels = yShownLabels, start = ystart, end = yend, interval = ylabelinterval )
-        # set ytick sizes
-        PlotTweak.setYTickSizes(ax, yShownLabelsBoolean, majorFontsize= yTickMajorFontSize, minorFontSize=yTickMinorFontSize)
-        
-        # limit axes
-        PlotTweak.setXLim(ax, start = xstart, end = xend)
-        PlotTweak.setYLim(ax, start = ystart, end = yend)
-             
-        # set axes labels
-        PlotTweak.setXaxisLabel( ax, xlabel, xunit, useBold)
-        PlotTweak.setYaxisLabel( ax, ylabel, yunit, useBold)
-        
-        
-        # set legend
-        if setLegend:
-            PlotTweak.setLegend( ax )
-        
-        # set annotation for figure
-        if annotationText is not None:
-            PlotTweak.setAnnotation(ax, annotationText, xPosition = annotationXPosition, yPosition = annotationYPosition)
         
         
 
