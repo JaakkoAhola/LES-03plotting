@@ -211,6 +211,17 @@ class PlotTweak:
         return r"$" +boldingStart +  "{" + label +  "}{\ }" +  boldingEnd + "$"
     
     def getMathLabel(label):
+        
+        
+        mathlabel = PlotTweak.getMathLabelFromDict(label)
+        if "{" in mathlabel:
+            mathlabel = PlotTweak.getLatexLabel(mathlabel)
+        return mathlabel
+    
+    def getMathLabelTableFormat(label):
+        return "$" + PlotTweak.getMathLabelFromDict(label) + "$"
+    
+    def getMathLabelFromDict(label):
         dictionary = {"q_inv":"\Delta q_{L}",
                       "tpot_inv":r"\Delta  {\theta}_{L}",
                       "tpot_pbl":r"{\theta}_{L}"                              ,
@@ -218,16 +229,12 @@ class PlotTweak:
                       "lwp": "LWP",
                       "cdnc": "cdnc",
                       "cos_mu": "cos_{\mu}",
-                      "ks": "N_{ks}",
-                      "as":"N_{as}",
-                      "cs":"N_{cs}",
+                      "ks": "N_{Ait}",
+                      "as":"N_{acc}",
+                      "cs":"N_{coa}",
                       "rdry_AS_eff":"r_{eff}",
                       "w2pos_linearFit": "w_{lin.fit}"}
-        
-        mathlabel = dictionary[label]
-        if "{" in mathlabel:
-            mathlabel = PlotTweak.getLatexLabel(mathlabel)
-        return mathlabel
+        return dictionary[label]
     
     def getLabelColor(label):
         dictionary = {"q_inv":"#42d4f4",
