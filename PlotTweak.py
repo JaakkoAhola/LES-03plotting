@@ -236,6 +236,15 @@ class PlotTweak:
                       "w2pos_linearFit": "w_{lin.fit}"}
         return dictionary[label]
     
+    def getMathLabelSubscript(label):
+        
+        try:
+            subscript = PlotTweak.getMathLabelFromDict(label).split("_")[1].replace("{","").replace("}", "")
+        except IndexError:
+            subscript = ""    
+            
+        return subscript
+    
     def getLabelColor(label):
         dictionary = {"q_inv":"#42d4f4",
                       "tpot_inv":"#f58231",
