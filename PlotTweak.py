@@ -148,7 +148,7 @@ class PlotTweak:
         dictionary = {"q_inv":"\Delta q_{L}",
                       "tpot_inv":r"\Delta  {\theta}_{L}",
                       "tpot_pbl":r"{\theta}_{L}"                              ,
-                      "pblh":"PBLH",
+                      "pblh":"H_{PBL}",
                       "lwp": "LWP",
                       "cdnc": "cdnc",
                       "cos_mu": "cos_{\mu}",
