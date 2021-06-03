@@ -184,6 +184,24 @@ class PlotTweak:
         
         return dictionary[label]
     
+    def getVariableUnit(label):
+        aerosolConcentration = "10^{6}\ kg^{-1}"
+        
+        dictionary = {"q_inv":"g\ kg^{-1}",
+                      "tpot_inv":"K",
+                      "tpot_pbl":"K",
+                      "pblh":"hPa",
+                      "lwp": "g\ m^{-2}",
+                      "cdnc": aerosolConcentration,
+                      "cos_mu": "",
+                      "ks": aerosolConcentration,
+                      "as":aerosolConcentration,
+                      "cs":aerosolConcentration,
+                      "rdry_AS_eff":"10^{-9} m",
+                      "w2pos_linearFit": ""}
+        
+        return dictionary[label]
+    
     def setXaxisLabel(ax, label, unit = None, useBold = True):
         PlotTweak._setLabel(ax.set_xlabel, label, unit, useBold)
     
