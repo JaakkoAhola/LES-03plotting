@@ -400,3 +400,15 @@ returns [False, False, True, False, True]"""
         dataframe = dataframe.dropna()
 
         return dataframe
+    
+    def reorganiseArrayByColumnNumber(array, col):
+        rrArray = []
+        for i in range(col):
+            for j in range( math.ceil(len(array)/col) ):
+                try:
+                    rrArray.append( array[i+col*j] )
+                except IndexError:
+                    pass
+        if len(rrArray) != len(array):
+            raise IndexError("arrays not matching")
+        return rrArray
