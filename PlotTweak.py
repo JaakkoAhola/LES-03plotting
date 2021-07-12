@@ -151,7 +151,7 @@ class PlotTweak:
                       "pblh":"H_{PBL}",
                       "lwp": "LWP",
                       "cdnc": "cdnc",
-                      "cos_mu": "cos_{\mu}",
+                      "cos_mu": r"{\cos\mu}",
                       "ks": "N_{Ait}",
                       "as":"N_{acc}",
                       "cs":"N_{coa}",
@@ -185,7 +185,7 @@ class PlotTweak:
         return dictionary[label]
     
     def getVariableUnit(label):
-        aerosolConcentration = "10^{6}\ kg^{-1}"
+        aerosolConcentration = "mg^{-1}" #"10^{6}\ kg^{-1}"
         
         dictionary = {"q_inv":"g\ kg^{-1}",
                       "tpot_inv":"K",
@@ -197,7 +197,7 @@ class PlotTweak:
                       "ks": aerosolConcentration,
                       "as":aerosolConcentration,
                       "cs":aerosolConcentration,
-                      "rdry_AS_eff":"10^{-9} m",
+                      "rdry_AS_eff":"nm",
                       "w2pos_linearFit": ""}
         
         return dictionary[label]
