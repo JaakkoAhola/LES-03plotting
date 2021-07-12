@@ -339,6 +339,8 @@ returns [False, False, True, False, True]"""
         
     def roundUp(number, scale):
         return int(round((number + scale)/scale,0)*scale)
+    def roundUpToScale(number,scale):
+        return int(math.ceil(number/scale)*scale)
     
     def roundDown(number, scale):
         return int(round((number - scale)/scale,0)*scale)
