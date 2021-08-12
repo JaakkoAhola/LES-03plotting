@@ -156,7 +156,9 @@ class PlotTweak:
                       "as":"N_{acc}",
                       "cs":"N_{coa}",
                       "rdry_AS_eff":"r_{eff}",
-                      "w2pos_linearFit": "w_{lin.fit}"}
+                      "w2pos_linearFit": "w_{lin.fit}",
+                      "rainProductionFirstHour_linearFit": "rainProductionFirstHour_{lin.fit}"}
+        
         return dictionary[label]
     
     def getMathLabelSubscript(label):
@@ -180,7 +182,8 @@ class PlotTweak:
                       "as":"#f032e6",
                       "cs":"#dcbeff",
                       "rdry_AS_eff":"#fabed4",
-                      "w2pos_linearFit": "#469990"}
+                      "w2pos_linearFit": "#469990",
+                      "rainProductionFirstHour_linearFit" : "#469990"}
         
         return dictionary[label]
     
