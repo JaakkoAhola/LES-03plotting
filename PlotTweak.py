@@ -145,12 +145,12 @@ class PlotTweak:
         return "$" + PlotTweak.getMathLabelFromDict(label) + "$"
     
     def getMathLabelFromDict(label):
-        dictionary = {"q_inv":"\Delta q_{L}",
+        dictionary = {"q_inv":"\Delta q_{t}",
                       "tpot_inv":r"\Delta  {\theta}_{L}",
                       "tpot_pbl":r"{\theta}_{L}"                              ,
                       "pblh":"H_{PBL}",
                       "lwp": "LWP",
-                      "cdnc": "cdnc",
+                      "cdnc": "CDNC",
                       "cos_mu": r"{\cos\mu}",
                       "ks": "N_{Ait}",
                       "as":"N_{acc}",
