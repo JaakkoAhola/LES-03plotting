@@ -13,16 +13,16 @@ class FileSystem:
     def createSubfolder(rootfolderName, subfolderName):
         subfolder = pathlib.Path(rootfolderName) / subfolderName
         subfolder.mkdir( parents=True, exist_ok = True )
-        
+
         return subfolder
-    
+
     def makeFolder(folder):
         """
         Parameters
         ----------
         folder :  : pathlib.Path
-            
-        
+
+
         creates folder and its parents
 
         Returns
@@ -31,7 +31,7 @@ class FileSystem:
 
         """
         folder.mkdir( parents=True, exist_ok = True )
-    
+
     def readYAML(absoluteFilePath):
         with open(absoluteFilePath, "r") as stream:
             try:
@@ -39,14 +39,19 @@ class FileSystem:
             except yaml.YAMLError as exc:
                 print(exc)
         return output
-    
+
     def writeYAML(absoluteFilePath, data):
         with open(absoluteFilePath, "w") as stream:
             try:
                 yaml.dump(data, stream)
             except yaml.YAMLError as exc:
                 print(exc)
-            
-    
+
     def getAbsoluteFilename(folder, file):
         return pathlib.Path(folder) / file
+
+    def get_all_keys_from_dict(d):
+        for key, value in d.items():
+            yield key
+            if isinstance(value, dict):
+                yield from FileSystem.get_all_keys_from_dict(value)
