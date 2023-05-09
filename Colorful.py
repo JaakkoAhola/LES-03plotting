@@ -11,42 +11,37 @@ import numpy
 import os
 import pathlib
 import seaborn
+import pandas
+import duckdb
 
 
 class Colorful:
     # if snsColorPalette and matplotlibColorMap are None and colorNumber < 21 use distinctColorlist
 
-    def __init__(self):
-
-        pass
-
-    def getColorList(self):
-        return self.colorList
-
-    def getIndyColorList(colorNumber=None,
-                         colorList=None,
-                         shuffling=False,
-                         blindnessLevel=4,
-                         useWhite=False,
-                         useBlack=True,
-                         useBeige=False,
-                         useLavender=False,
-                         useGrey=False,
-                         snsColorPalette=None,
-                         matplotlibColorMap=None,  # e.g. matplotlib.pyplot.cm.gist_ncar
-                         matplotlibLimiter=0.95
-                         ):
+    def get_indy_color_list(colorNumber=None,
+                            colorList=None,
+                            shuffling=False,
+                            blindness_level=4,
+                            use_white=False,
+                            use_black=True,
+                            use_beige=False,
+                            use_lavender=False,
+                            use_grey=False,
+                            snsColorPalette=None,
+                            matplotlibColorMap=None,  # e.g. matplotlib.pyplot.cm.gist_ncar
+                            matplotlibLimiter=0.95
+                            ):
 
         if colorList is not None:
             colorList = colorList
 
-        nmax = 22 - int(not useWhite) - int(not useBlack) - int(not useBeige) - int(not useLavender) - int(not useGrey)
+        nmax = 22 - int(not use_white) - int(not use_black) - int(not use_beige) - int(not use_lavender) - int(not use_grey)
 
         if snsColorPalette is None and matplotlibColorMap is None and colorNumber < nmax:
-            colorList = Colorful.getDistinctColorList(colorNumber, blindnessLevel=blindnessLevel,
-                                                      useWhite=useWhite, useBlack=useBlack,
-                                                      useBeige=useBeige, useLavender=useLavender,
-                                                      useGrey=useGrey)
+            colorList = Colorful.getDistinctColorList(colorNumber, blindness_level=blindness_level,
+                                                      use_white=use_white, use_black=use_black,
+                                                      use_beige=use_beige, use_lavender=use_lavender,
+                                                      use_grey=use_grey)
         elif snsColorPalette is None and matplotlibColorMap is None and colorNumber > nmax:
             colorList = seaborn.color_palette(snsColorPalette, colorNumber)
         elif snsColorPalette is not None:
@@ -62,9 +57,9 @@ class Colorful:
 
         return colorList
 
-    def getScientificColormap(cmap_name,
-                              scm_base_dir=os.environ["SCRIPT"] + "/" + "ScientificColourMaps5/",
-                              reverse=False):
+    def get_scientific_colormap(cmap_name,
+                                scm_base_dir=os.environ["SCRIPT"] + "/" + "ScientificColourMaps5/",
+                                reverse=False):
 
         cmap_file = pathlib.Path(scm_base_dir) / cmap_name / (cmap_name + '.txt')
 
@@ -75,108 +70,83 @@ class Colorful:
 
         return matplotlib.colors.LinearSegmentedColormap.from_list(cmap_name, cmap_data)
 
-    def getDistinctColorList(elements,
-                             blindnessLevel=4,
-                             useBlack=True,
-                             useWhite=False,
-                             useLavender=False,
-                             useBeige=False,
-                             useGrey=False):
+    def get_distinct_colors_df():
 
-        # list of all the colors
-        distinctColorsMother = {"red": "#e6194B", "green": "#3cb44b",
-                                "yellow": "#ffe119", "blue": "#4363d8",
-                                "orange": "#f58231", "purple": "#911eb4",
-                                "cyan": "#42d4f4", "magenta": "#f032e6",
-                                "lime": "#bfef45", "pink": "#fabebe",
-                                "teal": "#469990", "lavender": "#e6beff",
-                                "brown": "#9A6324", "beige": "#fffac8",
-                                "maroon": "#800000", "mint": "#aaffc3",
-                                "olive": "#808000", "apricot": "#ffd8b1",
-                                "navy": "#000075", "grey": "#a9a9a9",
-                                "white": "#ffffff", "black": "#000000"}
+        folder = pathlib.Path(__file__).parent
+        return pandas.read_csv(folder / "colormap.csv", index_col=0)
 
+    def get_distinct_color_list_by_name(elements):
+        distinct_colors_df = Colorful.get_distinct_colors_df()
         if isinstance(elements, str):
-            distinctColors = distinctColorsMother[elements.lower()]
+            elements = elements.lower()
+            color_list = distinct_colors_df.loc[elements, "color"]
         elif isinstance(elements, list):
-            distinctColors = {}
-            for key in elements:
-                key = key.lower()
-                if key in distinctColorsMother:
-                    distinctColors[key] = distinctColorsMother[key]
+            elements = [ele.lower() for ele in elements]
+            color_list = list(distinct_colors_df.loc[elements, "color"].values)
+        else:
+            raise Exception("elements should be either str or list")
 
-            distinctColors = list(distinctColors.values())
-        elif isinstance(elements, int):
+        return color_list
 
-            distinctColors = distinctColorsMother
-            # choose indexes of colors, based on blindnessLevel parameter (values 1,2,3,4 allowed, default 4)
+    def get_distinct_color_list_by_number(elements: int,
+                                          blindness_level=1,
+                                          order_by_convenient=True,
+                                          use_black=True,
+                                          use_white=False,
+                                          use_lavender=False,
+                                          use_beige=False,
+                                          use_grey=False,
+                                          ):
 
-            if blindnessLevel == 1:  # 95% of population can tell the difference
-                pass  # 22 colors including black & white
+        distinct_colors_df = Colorful.get_distinct_colors_df()
 
-            elif blindnessLevel == 2:  # 99% of population can tell the difference
-                del distinctColors["purple"]
-                del distinctColors["lime"]
-                del distinctColors["olive"]
-                del distinctColors["apricot"]
+        distinct_colors_df["name"] = distinct_colors_df.index
+        blindness_level_sql = f"blindness_level_{blindness_level}==True"
 
-            elif blindnessLevel == 3:  # 99,99% of population can tell the difference
-                keys = ["yellow", "blue", "orange", "pink", "lavender", "maroon", "navy", "grey", "white", "black"]
+        if order_by_convenient:
+            order_by_convenient_sql = "convenient"
+        else:
+            order_by_convenient_sql = "rainbow"
 
-                distinctColors = {key: distinctColorsMother[key] for key in keys}
+        use_color = {"black": use_black,
+                     "white": use_white,
+                     "lavender": use_lavender,
+                     "beige": use_beige,
+                     "grey": use_grey}
 
-            elif blindnessLevel == 4:  # ~100% of population can tell the difference
-
-                keys = ["yellow", "blue", "grey", "white", "black"]
-
-                distinctColors = {key: distinctColorsMother[key] for key in keys}
+        use_color_sql_dict = {}
+        for color in use_color:
+            if use_color[color]:
+                use_color_sql_dict[color] = ""
             else:
-                raise Exception("Wrong blindnessLevel used")
+                use_color_sql_dict[color] = f"is_{color}==False"
+        use_color_sql = " AND ".join(list(filter(len, list(use_color_sql_dict.values()))))
 
-            # if white is not needed, remove it from the listOfIndexes
-            # useWhite default set is False since usually colors are painted using white background
-            if not useWhite:
-                try:
-                    del distinctColors["white"]
-                except KeyError:
-                    pass  # value already removed
+        if len(use_color_sql) > 0:
+            use_color_sql = f"AND {use_color_sql}"
 
-            # if you don't want to use black color
-            if not useBlack:
-                try:
-                    del distinctColors["white"]
-                except KeyError:
-                    pass  # value already removed
+        color_df = duckdb.query(f"""SELECT color
+FROM distinct_colors_df
+WHERE {blindness_level_sql}
+{use_color_sql}
+ORDER BY {order_by_convenient_sql}
+""").df()
+        color_list_all_possible = list(color_df.values.flatten())
 
-            # if you don't want to use lavender color
-            if not useLavender:
-                try:
-                    del distinctColors["lavender"]
-                except KeyError:
-                    pass  # value already removed
+        # if the number of colors needed is larger than within the blindness_level, use recursion and decrease blindness_level
+        if elements > len(color_list_all_possible) and (blindness_level > 1):
+            return Colorful.getDistinctColorList(elements,
+                                                 blindness_level - 1,
+                                                 use_black=use_black,
+                                                 use_white=use_white,
+                                                 use_lavender=use_lavender,
+                                                 use_beige=use_beige,
+                                                 use_grey=use_grey)
 
-            # if you don't want to use beige color
-            if not useBeige:
-                try:
-                    del distinctColors["beige"]
-                except KeyError:
-                    pass  # value already removed
+        # if the number of colors needed is larger than possible colors and blindness_level can't be decreased, return False value
+        elif elements > len(color_list_all_possible) and (blindness_level == 1):
+            raise Exception("list of colors not possible to generate with the given number")
+        else:
+            color_list = color_list_all_possible[:elements]  # give list of distinctColors with given number, blindness_level and choice of using white & black
 
-            # if you don't want to use grey color
-            if not useGrey:
-                try:
-                    del distinctColors["grey"]
-                except KeyError:
-                    pass  # value already removed
-
-            # if the number of colors needed is larger than within the blindnessLevel, use recursion and decrease blindnessLevel
-            if elements > len(distinctColors) and (blindnessLevel > 1):
-                return Colorful.getDistinctColorList(elements, blindnessLevel - 1, useBlack=useBlack, useWhite=useWhite, useLavender=useLavender, useBeige=useBeige, useGrey=useGrey)
-
-            # if the number of colors needed is larger than possible colors and blindnessLevel can't be decreased, return False value
-            elif elements > len(distinctColors) and (blindnessLevel == 1):
-                raise Exception("list of colors not possible to generate with the given number")
-            else:
-                distinctColors = list(distinctColors.values())[:elements]  # give list of distinctColors with given number, blindnessLevel and choice of using white & black
-
-        return distinctColors
+        return color_list
