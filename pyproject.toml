@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "les-03plotting"
+version = "2.1.0"
+description = "A Python plotting library used in Ahola et al 2020 and Ahola et al 2021"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Jaakko Ahola", email = "ahola.jj@gmail.com" }
+]
+requires-python = ">=3.8"
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+dependencies = [
+    "matplotlib",
+    "numpy",
+    "pandas",
+    "seaborn",
+    "xarray",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+    "isort",
+    "flake8",
+]
+
+[project.urls]
+Homepage = "https://github.com/jaakko-ahola/LES-03plotting"
+Repository = "https://github.com/jaakko-ahola/LES-03plotting"
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.black]
+line-length = 100
+target-version = ["py38", "py39", "py310", "py311", "py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 100

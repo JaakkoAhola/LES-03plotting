@@ -1,0 +1,11 @@
+matplotlib
+numpy
+pandas
+seaborn
+xarray
+
+[dev]
+pytest
+black
+isort
+flake8

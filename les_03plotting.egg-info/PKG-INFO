@@ -1,0 +1,35 @@
+Metadata-Version: 2.4
+Name: les-03plotting
+Version: 2.1.0
+Summary: A Python plotting library used in Ahola et al 2020 and Ahola et al 2021
+Author-email: Jaakko Ahola <ahola.jj@gmail.com>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/jaakko-ahola/LES-03plotting
+Project-URL: Repository, https://github.com/jaakko-ahola/LES-03plotting
+Classifier: Intended Audience :: Science/Research
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering :: Visualization
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: matplotlib
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: seaborn
+Requires-Dist: xarray
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: isort; extra == "dev"
+Requires-Dist: flake8; extra == "dev"
+
+# LES-03plotting
+A python plotting library used in Ahola et al 2020 and Ahola et al 2021
+
+Author:
+Jaakko Ahola

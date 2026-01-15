@@ -1,0 +1,7 @@
+README.md
+pyproject.toml
+les_03plotting.egg-info/PKG-INFO
+les_03plotting.egg-info/SOURCES.txt
+les_03plotting.egg-info/dependency_links.txt
+les_03plotting.egg-info/requires.txt
+les_03plotting.egg-info/top_level.txt
