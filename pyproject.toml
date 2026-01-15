@@ -43,8 +43,18 @@ dev = [
 Homepage = "https://github.com/jaakko-ahola/LES-03plotting"
 Repository = "https://github.com/jaakko-ahola/LES-03plotting"
 
-[tool.setuptools.packages.find]
-where = ["."]
+[tool.setuptools]
+py-modules = [
+    "Colorful",
+    "Data",
+    "Figure",
+    "FileSystem",
+    "InputSimulation",
+    "Plot",
+    "PlotTweak",
+    "Simulation",
+    "SimulationDataAnalysis",
+]
 
 [tool.black]
 line-length = 100
