@@ -12,7 +12,6 @@ import os
 import pathlib
 import seaborn
 import pandas
-import duckdb
 
 
 class Colorful:
@@ -123,15 +122,13 @@ class Colorful:
         use_color_sql = " AND ".join(list(filter(len, list(use_color_sql_dict.values()))))
 
         if len(use_color_sql) > 0:
-            use_color_sql = f"AND {use_color_sql}"
+            use_color_sql = f" and {use_color_sql}"
 
-        color_df = duckdb.query(f"""SELECT color
-FROM distinct_colors_df
-WHERE {blindness_level_sql}
-{use_color_sql}
-ORDER BY {order_by_convenient_sql}
-""").df()
-        color_list_all_possible = list(color_df.values.flatten())
+        query_str = f"{blindness_level_sql}{use_color_sql}"
+        color_df = (distinct_colors_df
+                    .query(query_str)
+                    .sort_values(by=order_by_convenient_sql))
+        color_list_all_possible = list(color_df["color"].values)
 
         # if the number of colors needed is larger than within the blindness_level, use recursion and decrease blindness_level
         if elements > len(color_list_all_possible) and (blindness_level > 1):
