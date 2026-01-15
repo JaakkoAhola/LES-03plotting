@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "les-03plotting"
-version = "2.1.0"
+version = "2.1.2"
 description = "A Python plotting library used in Ahola et al 2020 and Ahola et al 2021"
 readme = "README.md"
 license = "MIT"
