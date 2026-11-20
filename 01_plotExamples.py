@@ -149,7 +149,7 @@ def main(simulationDataFrameCSVFile):
     
     if False:
         # create figure object
-        fig2 = Figure("/home/aholaj/Nextcloud/kuvatesti","fourWinds", ncols=2, nrows=2, style ="seaborn-paper")
+        fig2 = Figure("/home/aholaj/Nextcloud/kuvatesti","fourWinds", ncols=2, nrows=2, style ="seaborn-v0_8-paper")
         # load ts-datasets and change their time coordinates to hours
         for k in ["ICE0_8h", "ICE1_8h"]:
             simulationCollection[k].getTSDataset()

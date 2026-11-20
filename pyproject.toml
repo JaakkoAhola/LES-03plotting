@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "les-03plotting"
-version = "2.1.2"
+version = "3.0.0"
 description = "A Python plotting library used in Ahola et al 2020 and Ahola et al 2021"
 readme = "README.md"
 license = "MIT"
@@ -24,9 +24,10 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Visualization",
 ]
 dependencies = [
-    "matplotlib",
+    "matplotlib>=3.6",
     "numpy",
     "pandas",
+    "pyyaml",
     "seaborn",
     "xarray",
 ]

@@ -202,8 +202,8 @@ class PlotTweak:
                       "cs":aerosolConcentration,
                       "rdry_AS_eff":"nm",
                       "w2pos_linearFit": "",
-                      "rainProduction": "mg\ m^2 s^{-1}",
-                      "wpos":"m\ s^{-1}"}
+                      "rainProduction": r"mg\ m^2 s^{-1}",
+                      "wpos":r"m\ s^{-1}"}
 
         return dictionary[label]
 

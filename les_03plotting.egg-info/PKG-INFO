@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: les-03plotting
-Version: 2.1.0
+Version: 3.0.0
 Summary: A Python plotting library used in Ahola et al 2020 and Ahola et al 2021
 Author-email: Jaakko Ahola <ahola.jj@gmail.com>
 License-Expression: MIT
@@ -17,9 +17,10 @@ Classifier: Programming Language :: Python :: 3.12
 Classifier: Topic :: Scientific/Engineering :: Visualization
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown
-Requires-Dist: matplotlib
+Requires-Dist: matplotlib>=3.6
 Requires-Dist: numpy
 Requires-Dist: pandas
+Requires-Dist: pyyaml
 Requires-Dist: seaborn
 Requires-Dist: xarray
 Provides-Extra: dev

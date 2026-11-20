@@ -7,6 +7,8 @@ Created on Fri Jan 10 13:16:21 2020
 @licence: MIT licence Copyright
 """
 import matplotlib
+import matplotlib.gridspec
+import matplotlib.pyplot
 import numpy
 import pathlib
 import seaborn
@@ -15,7 +17,7 @@ import sys
 class Figure:
     
     def __init__(self, figurefolder, name,
-                 nrows = 1, ncols =1, sharex=False, sharey=False, style = "seaborn-paper",
+                 nrows = 1, ncols =1, sharex=False, sharey=False, style = "seaborn-v0_8-paper",
                  figsize = None,width = None,
                  wspace=0.3, hspace=0.12, 
                  top = 0.985, left = 0.12, right=0.97, bottom = 0.1
@@ -96,7 +98,7 @@ class Figure:
             
         return newValue
 
-    def _setContext(self, style = "seaborn-paper", printing = False):
+    def _setContext(self, style = "seaborn-v0_8-paper", printing = False):
         matplotlib.rcParams.update(matplotlib.rcParamsDefault)
         matplotlib.pyplot.style.use(style)
 #        seaborn.set_context("poster")
