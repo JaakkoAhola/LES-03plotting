@@ -122,8 +122,8 @@ class Plot:
                                    timeStartH = 2.05, timeEndH = 48, analysis = False,
                                    fontsize = None, useLegend = True,
                                    figurePrefix = "",
-                                   kuvakansio = "/home/aholaj/OneDrive/000_WORK/000_ARTIKKELIT/000-Manuscript-ICE/kuvat/bini/",
-                                   kuvakansioPDF = "/home/aholaj/OneDrive/000_WORK/000_ARTIKKELIT/000-Manuscript-ICE/figures_pdf",
+                                   kuvakansio = os.path.expanduser("~/000-Manuscript-ICE/kuvat/bini/"),
+                                   kuvakansioPDF = os.path.expanduser("~/000-Manuscript-ICE/figures_pdf"),
                                    filenamePDF = "figure6"):
         
         print(mode, end = " ")
@@ -439,7 +439,7 @@ class Plot:
     def getAnimation2D(ax,
                        simulation : Simulation,
                        muuttuja = "S_Nc",
-                       kuvakansio =  "/home/aholaj/OneDrive/000_WORK/000_ARTIKKELIT/000-Manuscript-ICE/kuvat/anim",
+                       kuvakansio =  os.path.expanduser("~/000-Manuscript-ICE/kuvat/anim"),
                        useAverage=False, ytValue = 0, useLog = False):
         
         nc = simulation.getNCDataset()

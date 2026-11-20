@@ -8,6 +8,7 @@ Created on Thu Jan  9 10:50:04 2020
 """
 import matplotlib
 import numpy
+import os
 import pandas
 import time
 
@@ -25,7 +26,7 @@ def main(simulationDataFrameCSVFile):
     simulationCollection = InputSimulation.getSimulationCollection( simulationDataFrame )
         
     if False:
-        fig1 = Figure("/home/aholaj/Nextcloud/kuvatesti","Prognostic")
+        fig1 = Figure(os.path.expanduser("~/kuvatesti"),"Prognostic")
         
         cloudTicks = Plot.getTicks(0, 1000, 250)
     
@@ -43,7 +44,7 @@ def main(simulationDataFrameCSVFile):
         fig1.save()
     if False:
         # create figure object
-        fig2 = Figure("/home/aholaj/Nextcloud/kuvatesti","LWP")
+        fig2 = Figure(os.path.expanduser("~/kuvatesti"),"LWP")
         # load ts-datasets and change their time coordinates to hours
         for k in ["Prognostic_48h", "ICE4_24h", "Prognostic_2", "Prognostic_Aero", "Prognostic_2_Aero"]:
             simulationCollection[k].getTSDataset()
@@ -79,7 +80,7 @@ def main(simulationDataFrameCSVFile):
 
     if True:
         # create figure object
-        fig2 = Figure("/home/aholaj/Nextcloud/kuvatesti","Nc_ic")
+        fig2 = Figure(os.path.expanduser("~/kuvatesti"),"Nc_ic")
         # load ts-datasets and change their time coordinates to hours
         sensitive = ["ICE0_8h","ICE1_24h","ICE2_24h","ICE3_24h","ICE3_8h","ICE4_24h","ICE5_8h","ICE6_8h", "Prognostic_48h"]
         for k in sensitive:
@@ -113,7 +114,7 @@ def main(simulationDataFrameCSVFile):
         fig2.save(file_extension=".png")    
     if True:
         # create figure object
-        fig3 = Figure("/home/aholaj/Nextcloud/kuvatesti","IWP")
+        fig3 = Figure(os.path.expanduser("~/kuvatesti"),"IWP")
         # load ts-datasets and change their time coordinates to hours
         for k in ["Prognostic_48h", "ICE4_24h", "Prognostic_2", "Prognostic_Aero", "Prognostic_2_Aero"]:
             simulationCollection[k].getTSDataset()
@@ -149,7 +150,7 @@ def main(simulationDataFrameCSVFile):
     
     if False:
         # create figure object
-        fig2 = Figure("/home/aholaj/Nextcloud/kuvatesti","fourWinds", ncols=2, nrows=2, style ="seaborn-v0_8-paper")
+        fig2 = Figure(os.path.expanduser("~/kuvatesti"),"fourWinds", ncols=2, nrows=2, style ="seaborn-v0_8-paper")
         # load ts-datasets and change their time coordinates to hours
         for k in ["ICE0_8h", "ICE1_8h"]:
             simulationCollection[k].getTSDataset()
@@ -209,7 +210,7 @@ def main(simulationDataFrameCSVFile):
 if __name__ == "__main__":
     start = time.time()
     
-    simulationDataFrameCSVFile = "/home/aholaj/Nextcloud/kuvatesti/manuscriptSimulationData.csv"
+    simulationDataFrameCSVFile = os.path.expanduser("~/kuvatesti/manuscriptSimulationData.csv")
     main( simulationDataFrameCSVFile )
     
     end = time.time()
